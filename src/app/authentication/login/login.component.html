@@ -11,14 +11,7 @@
                     <div fxLayout="row wrap">
                         <!-- Col perfil-->
                         <div fxFlex.gt-sm="100" fxFlex.gt.xs="100" fxFlex="">
-                         <mat-form-field>
-                            <mat-label>Tu Perfil</mat-label>
-                            <mat-select  placeholder="Selecciona tu perfil"   [(value)]="perfil">
-                                <mat-option *ngFor="let food of foods" [value]="food.value">
-                                    {{food.viewValue}}
-                                </mat-option>
-                            </mat-select>
-                         </mat-form-field>
+                         
                         </div>
                         <!-- col full-->
                         <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">

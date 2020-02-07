@@ -39,7 +39,9 @@ const MENUITEMS = [
     icon: 'bubble_chart',
     badge: [{ type: 'red', value: '17' }],
     children: [
-      { state: 'badge', name: 'Badge', type: 'link' },
+ 
+      {state:'inicio', name:'Inicio', type:'link'}
+  /*    
       { state: 'button', name: 'Buttons', type: 'link' },
       { state: 'cards', name: 'Cards', type: 'link' },
       { state: 'grid', name: 'Grid List', type: 'link' },
@@ -58,8 +60,10 @@ const MENUITEMS = [
       { state: 'snackbar', name: 'Snackbar', type: 'link' },
       { state: 'slider', name: 'Slider', type: 'link' },
       { state: 'slide-toggle', name: 'Slide Toggle', type: 'link' }
+      */
     ]
   },
+  /*
   {
     state: 'apps',
     name: 'Apps',
@@ -227,6 +231,7 @@ const MENUITEMS = [
       }
     ]
   }
+  */
 ];
 
 @Injectable()

@@ -4,6 +4,8 @@ import {Examen} from './examen';
 export interface Alumno {
     indice?:number
     id?:string
+    materia?:string
+    usuario?:string
     nombreCompleto?:string
  clave?:string;
 nombre?:string;
@@ -13,11 +15,12 @@ nombre?:string;
  grupo?:number;
  plantel?:number
  turno?:string;
- date?:string
+ fecha?:string
+ hora?:string
 password?:string;
  email?:string;
  claveProfesor?:String;
- fecha?:string
+
  examenes?:Examen[]
 
     

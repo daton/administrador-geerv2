@@ -19,6 +19,7 @@ import { TooltipComponent } from './tooltip/tooltip.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { SliderComponent } from './slider/slider.component';
 import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
+import { InicioComponent } from './inicio/inicio.component';
 
 export const MaterialRoutes: Routes = [
   {
@@ -43,6 +44,18 @@ export const MaterialRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
             { title: 'Badge' }
+          ]
+        }
+      },
+      {
+      
+        path: 'inicio',
+        component: InicioComponent,
+        data: {
+          title: 'Inicio',
+          urls: [
+            { title: 'Dashboard', url: '/dashboard' },
+            { title: 'Inicio' }
           ]
         }
       },
