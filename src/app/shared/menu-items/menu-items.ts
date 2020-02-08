@@ -34,13 +34,14 @@ const MENUITEMS = [
   
   {
     state: 'material',
-    name: 'Material Ui',
+    name: 'Administración',
     type: 'sub',
-    icon: 'bubble_chart',
-    badge: [{ type: 'red', value: '17' }],
+    icon: 'account_balance',
+    badge: [{ type: 'blue', value: '2' }],
     children: [
  
-      {state:'inicio', name:'Inicio', type:'link'}
+      {state:'inicio', name:'Inicio', type:'link'},
+      {state:'profesores', name:'Profesores', type:'link'}
   /*    
       { state: 'button', name: 'Buttons', type: 'link' },
       { state: 'cards', name: 'Cards', type: 'link' },

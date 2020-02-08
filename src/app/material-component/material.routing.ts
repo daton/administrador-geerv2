@@ -20,6 +20,7 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
 import { SliderComponent } from './slider/slider.component';
 import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { ProfesoresComponent } from './profesores/profesores.component';
 
 export const MaterialRoutes: Routes = [
   {
@@ -56,6 +57,17 @@ export const MaterialRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
             { title: 'Inicio' }
+          ]
+        }
+      },
+      {
+        path: 'profesores',
+        component: ProfesoresComponent,
+        data: {
+          title: 'Profesores',
+          urls: [
+            { title: 'Dashboard', url: '/dashboard' },
+            { title: 'Profesores' }
           ]
         }
       },

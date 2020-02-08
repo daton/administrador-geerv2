@@ -1,0 +1,269 @@
+<!-- row -->
+<!-- ============================================================== -->
+<div fxLayout="row wrap">
+    <!-- Card column -->
+    <div fxFlex.gt-sm="100%" fxFlex="100">
+      <mat-card>
+        <mat-card-content>
+          <mat-card-title>Profesores registrados:  {{profesores.length}}</mat-card-title>
+        </mat-card-content>
+        <mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab" (selectedTabChange)="onTabChanged($event);">
+          <!--PRIMR TAB DEL LISTADO DE TODOS LOS PROFESORES-->
+          <!-- ----------------------------------------------------------------------------------------------->
+          <!-------------------------------------------------------------------------------------------------->
+          <mat-tab label="Profesores">
+            <div class="demo-tab-content text-center" >
+              <!-- AQUI VA EL LISTADO DE TODOS LOS PROFESORES DADOS DE ALTA-->
+              <!--EMPIEZA TABLA E MOSTRADO DE TODOS LOS PROFESORES-->
+              
+              <p>En el filtro puede buscar por clave del profesor, nombre  o usuario, según crea conveniente, para modificar dé click en la clave del profesor dentro de la tabla.
+              </p>
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+              </mat-form-field>
+              <div class="responsive-table">
+                <mat-table #table [dataSource]="dataSource" matSort  >
+  
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="clave">
+                    <mat-header-cell *matHeaderCellDef> Clave. </mat-header-cell>
+                    <mat-cell *matCellDef="let profesor">
+                      
+                      <button mat-button class="fondo" (click)="modificar(profesor.clave)">
+                        <mat-icon>person</mat-icon>
+                         {{profesor.clave}}
+                      </button>
+                   
+                      
+                    </mat-cell>
+                  </ng-container>
+  
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="nombre">
+                    <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                    <mat-cell *matCellDef="let profesor">
+                 
+                        {{profesor.nombre}} {{profesor.paterno}} {{profesor.materno}}
+                    </mat-cell>
+                  </ng-container>
+  
+                  <!-- Weight Column -->
+                  <ng-container matColumnDef="usuario">
+                    <mat-header-cell *matHeaderCellDef    mat-sort-header> Usuario </mat-header-cell>
+                    <mat-cell *matCellDef="let profesor">
+                      <span class="header-label">Usuario:</span>
+                      {{profesor.usuario}}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="password">
+                    <mat-header-cell *matHeaderCellDef    mat-sort-header> Password </mat-header-cell>
+                    <mat-cell *matCellDef="let profesor">
+                      <span class="header-label">Password:</span>
+                      {{profesor.password}}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="fecha">
+                    <mat-header-cell *matHeaderCellDef    mat-sort-header>Fecha reg. </mat-header-cell>
+                    <mat-cell *matCellDef="let profesor">
+                      <span class="header-label">Fecha:</span>
+                      {{profesor.fecha}}
+                    </mat-cell>
+                  </ng-container>
+  
+                  <!-- Symbol Column -->
+                
+  
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+              </div>
+  
+            </div>
+          </mat-tab>
+          <!-- TERMINA TAB DE TODOS LOS PROFSORES------------------------------------------------------->
+          <mat-tab label="Modificar" disabled>
+  
+            <div class="demo-tab-content">
+              <!--INICIA ALTA PREOFESORES-->
+              <!--*************************************************************************************-->
+              <div>
+                <div fxLayout="row wrap">
+                  <div fxFlex.gt-sm="100" fxFlex="100">
+                    <mat-card>
+                      <mat-card-content>
+                        <mat-card-title>Datos del Profesor</mat-card-title>
+                        <!-- ============================================================== -->
+                        <!-- column -->
+                        <!-- ============================================================== -->
+                        <form [formGroup]="form">
+  
+                            <div fxLayout="row wrap">
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Código" [formControl]="form.controls['codigo']"  readonly   name="codigo" [(ngModel)]="profesor.clave">
+                                </mat-form-field>
+                                <mat-hint *ngIf="form.controls['codigo'].hasError('required') && form.controls['codigo'].touched" class="text-danger font-14">Debe escribir su clave de profesor. </mat-hint>
+                             
+                              <!--  <mat-hint *ngIf="form.controls['fname'].hasError('minlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name must be at least 5 characters long.</mat-hint>
+                               <mat-hint *ngIf="form.controls['fname'].hasError('maxlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name cannot exceed 10 characters.</mat-hint>
+                              -->
+                              </div>
+                    
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Usuario, ejemplo: B16_Lupita" [formControl]="form.controls['usuario']"  name="usuario" [(ngModel)]="profesor.usuario" >
+                                </mat-form-field>
+                                <small *ngIf="form.controls['usuario'].hasError('required') && form.controls['usuario'].touched" class="text-danger font-14">Debe proporcionar tu usuario</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                    
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Nueva Contraseña" [formControl]="form.controls['password']" type="password"  [type]="hide ? 'password' : 'text'"  name="password" [(ngModel)]="profesor.password">
+                                  <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                                <small *ngIf="form.controls['password'].hasError('required') && form.controls['password'].touched" class="text-danger font-14">Debes escribir tu contraseña.</small>
+                              </div>
+                      
+                             
+                      
+                      
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Correo electrónico" [formControl]="form.controls['email']" type="email"  name="email" [(ngModel)]="profesor.email">
+                                </mat-form-field>
+                                <small *ngIf="form.controls['email'].hasError('required') && form.controls['email'].touched" class="text-danger font-14">Debe incluir tu correo electrónico.</small>
+                                <small *ngIf="form.controls['email'].errors?.email && form.controls['email'].touched" class="text-danger font-14">Su correo electrónico no es válido.</small>
+                              </div>
+                      
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Nombre" [formControl]="form.controls['nombre']"  name="nombre" [(ngModel)]="profesor.nombre" >
+                                </mat-form-field>
+                                <small *ngIf="form.controls['nombre'].hasError('required') && form.controls['nombre'].touched" class="text-danger font-14">Debe proporcionar tu nombre</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Apellido paterno" [formControl]="form.controls['paterno']" name="paterno" [(ngModel)]="profesor.paterno">
+                                </mat-form-field>
+                                <small *ngIf="form.controls['paterno'].hasError('required') && form.controls['paterno'].touched" class="text-danger font-14">Debe proporcionar tu apellido paterno</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Apellido materno" [formControl]="form.controls['materno']" name="materno" [(ngModel)]="profesor.materno">
+                                </mat-form-field>
+                                <small *ngIf="form.controls['materno'].hasError('required') && form.controls['materno'].touched" class="text-danger font-14">Debe proporcionar tu apellido materno</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                    
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Celular" [formControl]="form.controls['celular']"  name="celular" [(ngModel)]="profesor.celular" >
+                                </mat-form-field>
+                                <small *ngIf="form.controls['celular'].hasError('required') && form.controls['celular'].touched" class="text-danger font-14">El número de celular es requerido</small>
+                                <small *ngIf="form.controls['celular'].errors?.phone &&  form.controls['celular'].touched" class="text-danger font-14">Debe proporcionar un número de celular válido</small>
+                              </div>
+                    
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Teléfono" [formControl]="form.controls['telefono']" name="telefono" [(ngModel)]="profesor.telefono">
+                                  <mat-icon matSuffix>phone</mat-icon>
+                                </mat-form-field>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                    
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <mat-select placeholder="Plantel" [formControl]="form.controls['planteles']" name="planteles" multiple [(ngModel)]="profesor.planteles"  >
+                                    <mat-option *ngFor="let plantel of listaPlanteles" [value]="plantel">{{plantel}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <small *ngIf="form.controls['planteles'].hasError('required') && form.controls['planteles'].touched" class="text-danger font-14">Debes seleccionar tu plantel</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                    
+                    
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <mat-select placeholder="Turno" [formControl]="form.controls['turnos']"   name="turno" [(ngModel)]="profesor.turno"  >
+                                    <mat-option *ngFor="let turno of listaTurnos" [value]="turno">{{turno}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <small *ngIf="form.controls['turnos'].hasError('required') && form.controls['turnos'].touched" class="text-danger font-14">Debes seleccionar tu turno</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                    
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <mat-select placeholder="Sistema" [formControl]="form.controls['sistemas']"  name="sistema" [(ngModel)]="profesor.sistema"  >
+                                    <mat-option *ngFor="let sistema of listaSistemas" [value]="sistema">{{sistema}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <small *ngIf="form.controls['sistemas'].hasError('required') && form.controls['sistemas'].touched" class="text-danger font-14">Debe seleccionar un sistema</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                    
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <mat-select placeholder="Area disciplinaria" [formControl]="form.controls['areas']"  name="area" [(ngModel)]="profesor.area"  >
+                                    <mat-option *ngFor="let area of listaAreas" [value]="area">{{area}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <small *ngIf="form.controls['areas'].hasError('required') && form.controls['areas'].touched" class="text-danger font-14">Debe seleccionar un área</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                    
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <mat-select placeholder="Seleccione sus materias" [formControl]="form.controls['materias']" multiple [(value)]="selected" >
+                                    <mat-option *ngFor="let materia of listaMaterias" [value]="materia">{{materia}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <small *ngIf="form.controls['materias'].hasError('required') && form.controls['materias'].touched" class="text-danger font-14">Debe seleccionar sus materias</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                    
+                    
+                             
+                    
+                    
+                             
+                    
+                    
+                    
+                      
+                             
+                            </div>
+                      
+                            <mat-card-actions>
+                              <button mat-raised-button color="primary" (click)="actualizarProfesor()"  type="submit" [disabled]="!form.valid">Actualizar</button>
+                            </mat-card-actions>
+                          </form>
+                      </mat-card-content>
+                    </mat-card>
+                  </div>
+                </div>
+  
+              </div>
+              <!--TERMINA ALTA PROFESORES-->
+              <!--***************************************************************************************-->
+  
+            </div>
+          </mat-tab>
+          <!--TERMINA TAB DE ALTA DE PROFESORE--------------------------------------------------------------->
+          <!----------------------------------------------------------------------------------------------->
+  
+  
+  
+  
+        </mat-tab-group>
+      </mat-card>
+    </div>
+  </div>

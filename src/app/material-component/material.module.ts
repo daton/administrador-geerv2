@@ -33,6 +33,7 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
 import { SliderComponent } from './slider/slider.component';
 import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { ProfesoresComponent } from './profesores/profesores.component';
 
 @NgModule({
   imports: [
@@ -67,7 +68,8 @@ import { InicioComponent } from './inicio/inicio.component';
     SnackbarComponent,
     SliderComponent,
     SlideToggleComponent,
-    InicioComponent
+    InicioComponent,
+    ProfesoresComponent
   ]
 })
 export class MaterialComponentsModule {}
