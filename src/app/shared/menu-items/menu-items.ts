@@ -41,7 +41,8 @@ const MENUITEMS = [
     children: [
  
       {state:'inicio', name:'Inicio', type:'link'},
-      {state:'profesores', name:'Profesores', type:'link'}
+      {state:'profesores', name:'Profesores', type:'link'},
+      {state:'claves-profesores', name:'Claves de profesores', type:'link'}
   /*    
       { state: 'button', name: 'Buttons', type: 'link' },
       { state: 'cards', name: 'Cards', type: 'link' },
