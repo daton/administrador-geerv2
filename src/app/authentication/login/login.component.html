@@ -16,7 +16,7 @@
                         <!-- col full-->
                         <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
                             <mat-form-field>
-                                <input matInput   placeholder="Correo" [formControl]="form.controls['login']"> 
+                                <input matInput   placeholder="usuario" [formControl]="form.controls['login']"> 
                             </mat-form-field>
                             <small *ngIf="form.controls['login'].hasError('required') && form.controls['login'].touched" class="text-danger support-text">Correo requerido</small>
 

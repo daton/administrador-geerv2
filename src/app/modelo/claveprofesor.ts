@@ -1,4 +1,8 @@
-export class Claveprofesor {
+import { Profesor } from "./profesor"
 
-    constructor(private numero:string){}
+export class Claveprofesor {
+claveProfesor?:string
+plantel?:string
+nombre?:string
+profesor?:Profesor
 }

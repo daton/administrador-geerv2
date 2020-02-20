@@ -1,1 +1,169 @@
-<p>En construcción...</p>
+<!-- row -->
+<!-- ============================================================== -->
+<div fxLayout="row wrap">
+    <!-- Card column -->
+    <div fxFlex.gt-sm="100%" fxFlex="100">
+      <mat-card>
+        <mat-card-content>
+          <mat-card-title>Claves totales:  {{claveprofesores.length}}</mat-card-title>
+        </mat-card-content>
+        <p>En este apartado se administran las claves  de profesores en el sistema , se pueden dar de alta y de baja.<br>
+          Es importante saber que las claves mostradas aquí pueden estar  o no estar asociadas a un profesor registrado, para mayor información dar click en el
+          botón de la clave para saber si está o no asociada a un profesor registrado.        </p>
+        <mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab" (selectedTabChange)="onTabChanged($event);">
+          <!--PRIMR TAB DEL LISTADO DE TODOS LOS PROFESORES-->
+          <!-- ----------------------------------------------------------------------------------------------->
+          <!-------------------------------------------------------------------------------------------------->
+          <mat-tab label="Claves">
+            <div class="demo-tab-content text-center" >
+              <!-- AQUI VA EL LISTADO DE TODOS LOS PROFESORES DADOS DE ALTA-->
+              <!--EMPIEZA TABLA E MOSTRADO DE TODOS LOS PROFESORES-->
+              
+              <p>En el filtro puede buscar la clave, nombre  o plantel, según crea conveniente, para modificar dé click en la clave del profesor dentro de la tabla.
+              </p>
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+              </mat-form-field>
+              <div class="responsive-table">
+                <mat-table #table [dataSource]="dataSource" matSort  >
+  
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="claveProfesor">
+                    <mat-header-cell *matHeaderCellDef> Clave. </mat-header-cell>
+                    <mat-cell *matCellDef="let clave">
+                      
+                      <button mat-button class="fondo" (click)="modificar(clave.claveProfesor)">
+                        <mat-icon>person</mat-icon>
+                         {{clave.claveProfesor}}
+                      </button>
+                   
+                      
+                    </mat-cell>
+                  </ng-container>
+  
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="plantel">
+                    <mat-header-cell *matHeaderCellDef>Plantel</mat-header-cell>
+                    <mat-cell *matCellDef="let clave">
+                 
+                        {{clave.plantel}}
+                    </mat-cell>
+                  </ng-container>
+  
+                  <!-- Weight Column -->
+                  <ng-container matColumnDef="nombre">
+                    <mat-header-cell *matHeaderCellDef    mat-sort-header> Nombre </mat-header-cell>
+                    <mat-cell *matCellDef="let clave">
+                      <span class="header-label">Nombre:</span>
+                      {{clave.nombre}}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="registrada">
+                    <mat-header-cell *matHeaderCellDef    mat-sort-header>Registrada </mat-header-cell>
+                    <mat-cell *matCellDef="let clave">
+                      <span class="header-label">Registrada:</span>
+                      {{clave.registrada}}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="fecha">
+                    <mat-header-cell *matHeaderCellDef    mat-sort-header>Fecha reg. </mat-header-cell>
+                    <mat-cell *matCellDef="let clave">
+                      <span class="header-label">Fecha:</span>
+                      {{clave.fecha}}
+                    </mat-cell>
+                  </ng-container>
+  
+                  <!-- Symbol Column -->
+                
+  
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+              </div>
+  
+            </div>
+          </mat-tab>
+          <!-- TERMINA TAB DE TODOS LOS PROFSORES------------------------------------------------------->
+          <mat-tab label="Modificar" disabled>
+  
+            <div class="demo-tab-content">
+              <!--INICIA ALTA PREOFESORES-->
+              <!--*************************************************************************************-->
+              <div>
+                <div fxLayout="row wrap">
+                  <div fxFlex.gt-sm="100" fxFlex="100">
+                    <mat-card>
+                      <mat-card-content>
+                        <mat-card-title>Datos del Profesor</mat-card-title>
+                        <!-- ============================================================== -->
+                        <!-- column -->
+                        <!-- ============================================================== -->
+                        <form [formGroup]="form">
+  
+                            <div fxLayout="row wrap">
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Clave de profesor" [formControl]="form.controls['claveProfesor']"     name="codigo" [(ngModel)]="claveProfesor.claveProfesor">
+                                </mat-form-field>
+                                <mat-hint *ngIf="form.controls['claveProfesor'].hasError('required') && form.controls['claveProfesor'].touched" class="text-danger font-14">Debe escribir la clave de profesor. </mat-hint>
+                             
+                              <!--  <mat-hint *ngIf="form.controls['fname'].hasError('minlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name must be at least 5 characters long.</mat-hint>
+                               <mat-hint *ngIf="form.controls['fname'].hasError('maxlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name cannot exceed 10 characters.</mat-hint>
+                              -->
+                              </div>
+                    
+                           
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <mat-select placeholder="Plantel" [formControl]="form.controls['planteles']" name="planteles" multiple [(ngModel)]="claveProfesor.plantel"  >
+                                    <mat-option *ngFor="let plantel of listaPlanteles" [value]="plantel">{{plantel}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <small *ngIf="form.controls['planteles'].hasError('required') && form.controls['planteles'].touched" class="text-danger font-14">Debes seleccionar un plantel</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                    
+                             
+                      
+                      
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Nombre" [formControl]="form.controls['nombre']"  name="nombre" [(ngModel)]="claveProfesor.nombre" >
+                                </mat-form-field>
+                                <small *ngIf="form.controls['nombre'].hasError('required') && form.controls['nombre'].touched" class="text-danger font-14">Debe proporcionar un nombre</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                            
+
+                      
+                             
+                            </div>
+                      
+                            <mat-card-actions>
+                              <button mat-raised-button color="primary" (click)="actualizarProfesor()"  type="submit" [disabled]="!form.valid">Actualizar</button>
+                            </mat-card-actions>
+                          </form>
+                      </mat-card-content>
+                    </mat-card>
+                  </div>
+                </div>
+  
+              </div>
+              <!--TERMINA ALTA PROFESORES-->
+              <!--***************************************************************************************-->
+  
+            </div>
+          </mat-tab>
+          <!--TERMINA TAB DE ALTA DE PROFESORE--------------------------------------------------------------->
+          <!----------------------------------------------------------------------------------------------->
+  
+  
+  
+  
+        </mat-tab-group>
+      </mat-card>
+    </div>
+  </div>
