@@ -28,37 +28,16 @@ export class ClavesProfesoresComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   dataSource: MatTableDataSource<ExcelClaveProfesor>
 
-  displayedColumns = ['claveProfesor', 'plantel', 'nombre', 'registrada', 'fecha'];
+  displayedColumns = ['claveProfesor', 'nombre', 'registrada', 'fecha'];
 
   indiceTab = 0;
   agregado: boolean
   claveprofesores: Claveprofesor[] = []
   excelClaveProfesores: ExcelClaveProfesor[] = []
   claveProfesor: Claveprofesor = {}
+  excelProfesor:ExcelClaveProfesor={}
 
-  listaPlanteles: string[] = [
-    'Plantel 1',
-    'Plantel 2',
-    'Plantel 3',
-    'Plantel 4',
-    'Plantel 5',
-    'Plantel 6',
-    'Plantel 7',
-    'Plantel 8',
-    'Plantel 9',
-    'Plantel 10',
-    'Plantel 11',
-    'Plantel 12',
-    'Plantel 13',
-    'Plantel 14',
-    'Plantel 15',
-    'Plantel 16',
-    'Plantel 17',
-    'Plantel 18',
-    'Plantel 19',
-    'Plantel 20',
-
-  ];
+ 
 
 
   constructor(private fb: FormBuilder, private http: HttpClient, private breakpointObserver: BreakpointObserver) {
@@ -66,8 +45,8 @@ export class ClavesProfesoresComponent implements OnInit {
     //El siguiente breakpoint es para hacer responsiva cada fila
     breakpointObserver.observe(['(max-width: 600px)']).subscribe(result => {
       this.displayedColumns = result.matches ?
-        ['claveProfesor', 'plantel', 'nombre', 'registrada', 'fecha'] :
-        ['claveProfesor', 'plantel', 'nombre', 'registrada', 'fecha'];
+        ['claveProfesor', 'nombre', 'registrada', 'fecha'] :
+        ['claveProfesor', 'nombre', 'registrada', 'fecha'];
     });
 
   }
@@ -82,10 +61,6 @@ export class ClavesProfesoresComponent implements OnInit {
           Validators.required, /*CustomValidators.equal("123")*/
 
         ])
-      ],
-      planteles: [
-        null,
-        Validators.compose([Validators.required, CustomValidators.email])
       ],
       nombre: [
         null,
@@ -223,6 +198,54 @@ export class ClavesProfesoresComponent implements OnInit {
 
 
   }
+
+  modificar(claveProfesor: string) {
+    this.indiceTab = 1
+    //  this.perfil = this.data.find(obj => obj.email == email)
+    console.log("Modificaras este id" + claveProfesor);
+
+
+    //BUscamos de los obtenidos al seleccionado
+    this.claveProfesor = this.claveprofesores.find(obj => obj.claveProfesor == claveProfesor)
+    console.log("La clave de profesor encontrado es  " + JSON.stringify(this.claveprofesores))
+
+    //Ajustamos los valore en cada uno de los campos
+    var materiasLeidas:string[]=[]
+
+
+  }
+
+  borrar(claveProfesor:string){
+  let mensaje:string=''
+  //Vemos si ya esta registrado
+  this.excelProfesor=this.excelClaveProfesores.find(obj=>obj.claveProfesor==claveProfesor)
+
+  if(this.excelProfesor.registrada=='Sí')mensaje='Esta clave ya esta registrada y tiene alumnos registrados, no se recomienda borrarla, se recomienda borrar hasta cierre de curso'
+  else mensaje= "Se borrará esta clave, ya no será reversible!";
+
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: mensaje,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText:'Cancelar',
+      confirmButtonText: 'Si, borrar definitivamente!'
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Borrada!',
+          'La clave ha sifo borrada',
+          'success'
+        )
+      }
+    })
+
+  }
+
+ 
+
 
 
   onTabChanged($event) {

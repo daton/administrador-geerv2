@@ -77,6 +77,9 @@ export class AppHeaderComponent {
   ];
 
   casa(){
+
+    localStorage.clear()
+    localStorage.removeItem("miAdministrador");
     this.router.navigate(['/authentication/login'],{skipLocationChange:true})
   }
 }

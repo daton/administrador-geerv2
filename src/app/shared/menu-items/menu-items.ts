@@ -37,7 +37,7 @@ const MENUITEMS = [
     name: 'Administración',
     type: 'sub',
     icon: 'account_balance',
-    badge: [{ type: 'blue', value: '2' }],
+    badge: [{ type: 'blue', value: '3' }],
     children: [
  
       {state:'inicio', name:'Inicio', type:'link'},

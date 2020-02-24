@@ -6,6 +6,7 @@ import { Profesor } from '../../modelo/profesor';
 import { Alumno } from '../../modelo/alumno';
 import { Estatus } from '../../modelo/estatus';
 import { Globales } from '../../modelo/globales';
+import { Administrador } from '../../modelo/administrador';
 
 export interface Food {
   value: string;
@@ -21,7 +22,7 @@ export interface Food {
 export class LoginComponent implements OnInit {
  //Para ocultar mostrar password
 hide=true
-
+administrador:Administrador={}
 
 alumno: Alumno = {};
 estatus: Estatus = {};
@@ -36,9 +37,25 @@ ngOnInit() {
 }
 
 onSubmit(){
-  console.log("has hecho click"+JSON.stringify(this.form.value));
+  console.log("has hecho clickES"+JSON.stringify(this.form.value));
 console.log("asasas "+this.form.get("login").value)
-if(this.form.get("login").value=='admin'&&this.form.get("password").value=='admin2018'){
+
+let login=this.form.get("login").value
+let password=this.form.get("password").value
+
+if(this.autenticar(login,password)){
+
+  //gUARDAMNOS  PARA LA SESION
+  this.administrador={
+    usuario:login,
+    password:password
+  }
+  Globales.administrador=this.administrador
+  //Guardamos localmente
+  console.log("Vamos a ver que pasa con el administrador .."+JSON.stringify(Globales.administrador));
+  localStorage.setItem("miAdministrador", JSON.stringify(Globales.administrador));
+  //this.administrador=JSON.parse(localStorage.getItem('miAdministrador'));
+
  this.mostrarError=false;
  this.router.navigate(["../material/inicio"], { skipLocationChange: true })
 }
@@ -49,6 +66,12 @@ if(this.form.get("login").value=='admin'&&this.form.get("password").value=='admi
 
 recuperar(){
   this.router.navigate(["/recuperar"], { skipLocationChange: true });
+}
+
+autenticar(usuario:string,password:string):boolean{
+  let valor=usuario=='admin'&&password=='admin2018'
+
+  return valor;
 }
 
 }

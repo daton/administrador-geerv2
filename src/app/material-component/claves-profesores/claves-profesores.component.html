@@ -36,19 +36,15 @@
                         <mat-icon>person</mat-icon>
                          {{clave.claveProfesor}}
                       </button>
+                      <button mat-button (click)="borrar(clave.claveProfesor)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
                    
                       
                     </mat-cell>
                   </ng-container>
   
-                  <!-- Name Column -->
-                  <ng-container matColumnDef="plantel">
-                    <mat-header-cell *matHeaderCellDef>Plantel</mat-header-cell>
-                    <mat-cell *matCellDef="let clave">
-                 
-                        {{clave.plantel}}
-                    </mat-cell>
-                  </ng-container>
+                
   
                   <!-- Weight Column -->
                   <ng-container matColumnDef="nombre">
@@ -116,15 +112,7 @@
                               </div>
                     
                            
-                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
-                                <mat-form-field>
-                                  <mat-select placeholder="Plantel" [formControl]="form.controls['planteles']" name="planteles" multiple [(ngModel)]="claveProfesor.plantel"  >
-                                    <mat-option *ngFor="let plantel of listaPlanteles" [value]="plantel">{{plantel}}</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                                <small *ngIf="form.controls['planteles'].hasError('required') && form.controls['planteles'].touched" class="text-danger font-14">Debes seleccionar un plantel</small>
-                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
-                              </div>
+                              
                     
                              
                       

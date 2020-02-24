@@ -26,6 +26,7 @@ export class Globales {
   public static cargando: boolean;
   public static cicloA:number
   public static cicloB:number
+  public static miToken:string
 
   public static menus: any = [
     {
