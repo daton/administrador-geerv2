@@ -10,17 +10,20 @@
 
                     <div fxLayout="row wrap">
                         <!-- Col perfil-->
-                        <div fxFlex.gt-sm="100" fxFlex.gt.xs="100" fxFlex="">
-                         
-                        </div>
+                       <!-- Col perfil-->
+                       <div fxFlex.gt-sm="100" fxFlex.gt.xs="100" fxFlex="">
+                        <mat-form-field>
+                           <mat-label>Administrador</mat-label>
+                           <mat-select  placeholder="usuario" [formControl]="form.controls['login']">
+                               <mat-option *ngFor="let usu of usuarios" [value]="usu.value">
+                                   {{usu.viewValue}}
+                               </mat-option>
+                           </mat-select>
+                        </mat-form-field>
+                        <small *ngIf="form.controls['login'].hasError('required') && form.controls['login'].touched" class="text-danger support-text">Usuario requerido</small>
+                       </div>
                         <!-- col full-->
-                        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
-                            <mat-form-field>
-                                <input matInput   placeholder="usuario" [formControl]="form.controls['login']"> 
-                            </mat-form-field>
-                            <small *ngIf="form.controls['login'].hasError('required') && form.controls['login'].touched" class="text-danger support-text">Correo requerido</small>
-
-                        </div>
+                       
                         <!-- col full-->
                         <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
                             <mat-form-field>

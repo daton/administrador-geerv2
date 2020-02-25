@@ -27,6 +27,8 @@ export class Globales {
   public static cicloA:number
   public static cicloB:number
   public static miToken:string
+  public static esAdmin:boolean
+  public static esSupervisor1:boolean
 
   public static menus: any = [
     {

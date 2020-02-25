@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { Estatus } from '../../modelo/estatus';
 import { Token } from '../../modelo/token';
+import { Administrador } from '../../modelo/administrador';
 
 @Component({
   selector: 'app-inicio',
@@ -14,13 +15,21 @@ export class InicioComponent implements OnInit {
   miToken: string
   token: Token = {}
   estatus: Estatus = {}
+  administrador:Administrador={}
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+
+        //Leemos
+        this.administrador = JSON.parse(localStorage.getItem('miAdministrador'));
+    console.log("Vamos en oninit de inicio"+JSON.stringify(Globales.administrador));
+    
+    
+
+
+  }
 
   ngOnInit() {
-
-
 
   }
 

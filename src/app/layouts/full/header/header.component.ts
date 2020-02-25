@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Router } from '@angular/router';
+import { Globales } from '../../../modelo/globales';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -77,6 +78,10 @@ export class AppHeaderComponent {
   ];
 
   casa(){
+
+
+    Globales.esAdmin=false;
+    Globales.esSupervisor1=false;
 
     localStorage.clear()
     localStorage.removeItem("miAdministrador");
