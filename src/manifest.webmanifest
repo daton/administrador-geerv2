@@ -5,8 +5,8 @@
   "background_color": "#fafafa",
   "display": "standalone",
   "gcm_sender_id": "103953800507",
-  "scope": "/admin/",
-  "start_url": "/admin/",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",

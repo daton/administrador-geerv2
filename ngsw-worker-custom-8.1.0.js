@@ -2080,7 +2080,7 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                 NOTIFICATION_OPTION_NAMES.filter(name => name in notification)
                     .forEach(name => options[name] = notification[name]);
                     yield clients.matchAll().then(matchedClients => {
-                        const url = new URL('/admin', location).href;
+                        const url = new URL('/admin/material/mensajeria', location).href;
                         for (let matchClient of matchedClients) {
                             if (matchClient.url.startsWith(url)) {
                                 return matchClient.focus();

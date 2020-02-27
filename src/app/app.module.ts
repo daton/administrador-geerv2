@@ -25,6 +25,10 @@ import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { AngularFireMessagingModule, AngularFireMessaging } from '@angular/fire/messaging';
+import { AngularFireModule } from '@angular/fire';
+import { AsyncPipe } from '@angular/common'
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -53,10 +57,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SharedModule,
     NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot(AppRoutes),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireMessagingModule,
+    AngularFireModule,
+  // ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('fcm-sw.js', { enabled: environment.production })
   ],
   providers: [
+
     {
+ 
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     }

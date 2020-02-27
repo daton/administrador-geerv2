@@ -16,6 +16,14 @@ import { MaterialRoutes } from './material.routing';
 import { InicioComponent } from './inicio/inicio.component';
 import { ProfesoresComponent } from './profesores/profesores.component';
 import { ClavesProfesoresComponent } from './claves-profesores/claves-profesores.component';
+import { ClavesAlumnosComponent } from './claves-alumnos/claves-alumnos.component';
+import { AlumnosComponent } from './alumnos/alumnos.component';
+import { RespaldoBaseComponent } from './respaldo-base/respaldo-base.component';
+import { GeneracionCodigosComponent } from './generacion-codigos/generacion-codigos.component';
+import { GeneracionExamenesComponent } from './generacion-examenes/generacion-examenes.component';
+import { CargarVideosComponent } from './cargar-videos/cargar-videos.component';
+import { CargarAndamiosComponent } from './cargar-andamios/cargar-andamios.component';
+import { MensajeriaComponent } from './mensajeria/mensajeria.component';
 
 @NgModule({
   imports: [
@@ -33,7 +41,15 @@ import { ClavesProfesoresComponent } from './claves-profesores/claves-profesores
     
     InicioComponent,
     ProfesoresComponent,
-    ClavesProfesoresComponent
+    ClavesProfesoresComponent,
+    ClavesAlumnosComponent,
+    AlumnosComponent,
+    RespaldoBaseComponent,
+    GeneracionCodigosComponent,
+    GeneracionExamenesComponent,
+    CargarVideosComponent,
+    CargarAndamiosComponent,
+    MensajeriaComponent
   ]
 })
 export class MaterialComponentsModule {}

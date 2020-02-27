@@ -6,6 +6,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/messaging'
 import { environment } from '../environments/environment';
 import { Globales } from './modelo/globales';
+import { AngularFireMessaging } from '@angular/fire/messaging';
 
 @Component({
   selector: 'app-root',
@@ -17,13 +18,20 @@ export class AppComponent {
   displayToken: string
 
 
-  constructor(private router: Router, private swUpdate: SwUpdate, private push: SwPush) {
+  constructor(private router: Router, private swUpdate: SwUpdate,private afMessaging: AngularFireMessaging) {
+
+
+    setTimeout(()=>{
+this.requestPushNotificationsPermission()
+    },2500)
+
 
     //Firebase
+    /*
     if (!firebase.apps.length) {
       firebase.initializeApp(environment.firebase);
       navigator.serviceWorker.getRegistration().then(swr => firebase.messaging().useServiceWorker(swr));
-    }
+    }*/
 
     //Leemos
     this.administrador = JSON.parse(localStorage.getItem('miAdministrador'));
@@ -45,6 +53,8 @@ export class AppComponent {
     }
 
 
+    /*
+
     push.messages.subscribe(msg => console.log('push message', msg));
     push.notificationClicks.subscribe(click => console.log('notification click', click));
     if (!firebase.apps.length) {
@@ -59,7 +69,11 @@ export class AppComponent {
       console.log("Permitidoooo con tokensito Y SERVICE WORKER MODIFICADO " + this.displayToken)
     }, 1800)
 
+    */
+
   }
+
+  /*
   permitToNotify() {
     const messaging = firebase.messaging();
     messaging.requestPermission()
@@ -75,6 +89,18 @@ export class AppComponent {
       .catch(err => {
         console.log('Unable to get permission to notify.', err);
       });
+  }*/
+ requestPushNotificationsPermission() { // requesting permission
+    this.afMessaging.requestToken // getting tokens
+      .subscribe(
+        (token) => { // USER-REQUESTED-TOKEN
+          console.log('Permiso concedido hijo de perra guardala!', token);
+          Globales.miToken=token;
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
   }
 
 }

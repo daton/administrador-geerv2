@@ -5,6 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import { Estatus } from '../../modelo/estatus';
 import { Token } from '../../modelo/token';
 import { Administrador } from '../../modelo/administrador';
+import { AngularFireMessaging } from '@angular/fire/messaging';
+import { mergeMapTo } from 'rxjs/operators';
+
+
 
 @Component({
   selector: 'app-inicio',
@@ -30,10 +34,15 @@ export class InicioComponent implements OnInit {
   }
 
   ngOnInit() {
-
+//Por lo pronto no hay nada
+console.log("El token global es este "+Globales.miToken)
   }
 
+ 
+
   subscribirse() {
+
+    console.log("AL SUBSCRIBIRSE "+Globales.miToken)
     if (Globales.miToken != null) {
       this.miToken = Globales.miToken
       //Guardamos el token
@@ -43,7 +52,7 @@ export class InicioComponent implements OnInit {
       //Guardamos el token en el back-end
       this.token = {
         token: Globales.miToken,
-        usuario: Globales.administrador.usuario
+        usuario: this.administrador.usuario
       }
 
       this.http.post<Estatus>(Globales.urlBase + "/token", this.token).subscribe(
