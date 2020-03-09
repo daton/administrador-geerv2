@@ -23,7 +23,7 @@ export class AppComponent {
 
     setTimeout(()=>{
 this.requestPushNotificationsPermission()
-    },2500)
+    },1500)
 
 
     //Firebase

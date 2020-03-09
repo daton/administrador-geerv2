@@ -41,6 +41,7 @@ export class ClavesAlumnosComponent implements OnInit {
   mimateria:Materia={}
 
   miClaveLibro:string
+  alumnosRegistrados:string
 
   listaGrupos: string[] = [];
   listaPlanteles: number[] = [
@@ -62,7 +63,16 @@ export class ClavesAlumnosComponent implements OnInit {
 
 
 
-  constructor(private http: HttpClient, private fb: FormBuilder ) { }
+  constructor(private http: HttpClient, private fb: FormBuilder ) { 
+
+this.http.get<string>(Globales.urlBase+"/admin-alumno").subscribe(
+  res=>{
+    this.alumnosRegistrados=res;
+  }
+)
+
+
+  }
 
   ngOnInit() {
     this.estatus={
