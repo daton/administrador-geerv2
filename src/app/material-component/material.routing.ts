@@ -11,6 +11,7 @@ import { GeneracionExamenesComponent } from './generacion-examenes/generacion-ex
 import { CargarVideosComponent } from './cargar-videos/cargar-videos.component';
 import { CargarAndamiosComponent } from './cargar-andamios/cargar-andamios.component';
 import { MensajeriaComponent } from './mensajeria/mensajeria.component';
+import { AlumnosTotalesComponent } from './alumnos-totales/alumnos-totales.component';
 
 export const MaterialRoutes: Routes = [
   {
@@ -48,6 +49,17 @@ export const MaterialRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
             { title: 'Profesores' }
+          ]
+        }
+      },
+      {
+        path: 'alumnos-totales',
+        component: AlumnosTotalesComponent,
+        data: {
+          title: 'Alumnos totales',
+          urls: [
+            { title: 'Dashboard', url: '/dashboard' },
+            { title: 'Alumnos totales' }
           ]
         }
       },

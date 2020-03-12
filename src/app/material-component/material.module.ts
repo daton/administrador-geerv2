@@ -24,6 +24,7 @@ import { GeneracionExamenesComponent } from './generacion-examenes/generacion-ex
 import { CargarVideosComponent } from './cargar-videos/cargar-videos.component';
 import { CargarAndamiosComponent } from './cargar-andamios/cargar-andamios.component';
 import { MensajeriaComponent } from './mensajeria/mensajeria.component';
+import { AlumnosTotalesComponent } from './alumnos-totales/alumnos-totales.component';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { MensajeriaComponent } from './mensajeria/mensajeria.component';
     GeneracionExamenesComponent,
     CargarVideosComponent,
     CargarAndamiosComponent,
-    MensajeriaComponent
+    MensajeriaComponent,
+    AlumnosTotalesComponent
   ]
 })
 export class MaterialComponentsModule {}

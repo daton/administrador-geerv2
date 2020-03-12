@@ -44,6 +44,7 @@ const MENUITEMS = [
  
       {state:'inicio', name:'Inicio', type:'link'},
       {state:'mensajeria', name:'Mensajeria', type:'link'},
+      {state:'alumnos-totales',name:'Alumnos totales', type:'link'},
       {state:'profesores', name:'Profesores', type:'link'},
       {state:'claves-profesores', name:'Claves de profesores', type:'link'},
       {state:'claves-alumnos', name:'Clave de alumnos', type:'link'},
