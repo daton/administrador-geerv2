@@ -25,7 +25,8 @@ import { CargarVideosComponent } from './cargar-videos/cargar-videos.component';
 import { CargarAndamiosComponent } from './cargar-andamios/cargar-andamios.component';
 import { MensajeriaComponent } from './mensajeria/mensajeria.component';
 import { AlumnosTotalesComponent } from './alumnos-totales/alumnos-totales.component';
-
+import { AngularFileUploaderModule } from "angular-file-uploader";
+import { FileUploadModule } from 'ng2-file-upload';
 @NgModule({
   imports: [
     CommonModule,
@@ -33,7 +34,9 @@ import { AlumnosTotalesComponent } from './alumnos-totales/alumnos-totales.compo
     DemoMaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    FileUploadModule,
     FlexLayoutModule,
+    AngularFileUploaderModule,
     CdkTableModule
   ],
   providers: [],
