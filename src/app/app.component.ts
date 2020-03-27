@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SwUpdate, SwPush, UpdateAvailableEvent } from '@angular/service-worker';
 import { Administrador } from './modelo/administrador';
@@ -7,23 +7,21 @@ import 'firebase/messaging'
 import { environment } from '../environments/environment';
 import { Globales } from './modelo/globales';
 import { AngularFireMessaging } from '@angular/fire/messaging';
+import{mergeMapTo} from 'rxjs/operators'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   administrador: Administrador = {}
   displayToken: string
+  token:string
 
 
   constructor(private router: Router, private swUpdate: SwUpdate,private afMessaging: AngularFireMessaging) {
 
-
-    setTimeout(()=>{
-this.requestPushNotificationsPermission()
-    },1500)
 
 
     //Firebase
@@ -72,6 +70,21 @@ this.requestPushNotificationsPermission()
     */
 
   }
+  ngOnInit(): void {
+   
+    this.afMessaging.requestPermission
+    .pipe(mergeMapTo(this.afMessaging.tokenChanges))
+    .subscribe(
+      (token)=>{console.log('Permiso consedido!!! Guadar al back end',token)
+    this.token=token
+    },
+    (error)=>{
+      console.error(error);
+    })
+        
+
+
+  }
 
   /*
   permitToNotify() {
@@ -90,17 +103,8 @@ this.requestPushNotificationsPermission()
         console.log('Unable to get permission to notify.', err);
       });
   }*/
- requestPushNotificationsPermission() { // requesting permission
-    this.afMessaging.requestToken // getting tokens
-      .subscribe(
-        (token) => { // USER-REQUESTED-TOKEN
-          console.log('Permiso concedido hijo de perra guardala!', token);
-          Globales.miToken=token;
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-  }
+
+
+  
 
 }

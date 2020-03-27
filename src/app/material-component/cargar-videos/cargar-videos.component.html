@@ -1,11 +1,31 @@
-<h1>Angular 9 FormData (multipart/data-form) Example</h1>
 <div>
     <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit()">      
       <div>
+
+        
+        <label class="custom-file-upload">
         <input type="file" name="file" (change)="onFileSelect($event)" />
+        <i class="fa fa-cloud-upload"></i> Seleccionar Video
+      </label>
+       
+        <button type="submit"  mat-raised-button color="primary">Subir</button>
+        {{archivaldo}}
+        <br>
+        {{porcentaje}}
       </div>
-      <div>
-        <button type="submit">Upload</button>
-      </div>
+  
+       
+     
     </form>
   </div>
+  <div fxLayout="row" *ngIf="cargando">
+    <div fxFlex.gt-sm="100%">
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>Cargando...</mat-card-title>
+              
+                <mat-progress-bar mode="indeterminate" value="40"></mat-progress-bar>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
