@@ -161,7 +161,7 @@
 													<div fxLayout="row wrap">
 														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
 															fxFlex="100">
-															<mat-radio-button value="0"  [checked]="preguntaActual.opciones[0].acierto" >Es correcta</mat-radio-button>
+															<mat-radio-button [(value)]="preguntaActual.opciones[0].titulo"  [(checked)]="preguntaActual.opciones[0].acierto" >Es correcta</mat-radio-button>
 															<mat-form-field>
 																<textarea matInput placeholder="Opción 1"
 																	[formControl]="form.controls['opcion1']"
@@ -180,7 +180,7 @@
 													<div fxLayout="row wrap">
 														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
 															fxFlex="100">
-															<mat-radio-button value="1"  [checked]="preguntaActual.opciones[1].acierto">Es correcta</mat-radio-button>
+															<mat-radio-button [(value)]="preguntaActual.opciones[1].titulo" [(checked)]="preguntaActual.opciones[1].acierto">Es correcta</mat-radio-button>
 															<mat-form-field>
 																<textarea matInput placeholder="Opción 2"
 																	[formControl]="form.controls['opcion2']"
@@ -199,7 +199,7 @@
 													<div fxLayout="row wrap">
 														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
 															fxFlex="100">
-															<mat-radio-button value="2" [checked]="preguntaActual.opciones[2].acierto">Es correcta</mat-radio-button>
+															<mat-radio-button [(value)]="preguntaActual.opciones[2].titulo" [(checked)]="preguntaActual.opciones[2].acierto">Es correcta</mat-radio-button>
 															<mat-form-field>
 																<textarea matInput placeholder="Opción 3"
 																	[formControl]="form.controls['opcion3']"
@@ -218,7 +218,7 @@
 													<div fxLayout="row wrap">
 														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
 															fxFlex="100">
-															<mat-radio-button value="3" [checked]="preguntaActual.opciones[3].acierto">Es correcta</mat-radio-button>
+															<mat-radio-button [(value)]="preguntaActual.opciones[3].titulo" [(checked)]="preguntaActual.opciones[3].acierto">Es correcta</mat-radio-button>
 															<mat-form-field>
 																<textarea matInput placeholder="Opción 4"
 																	[formControl]="form.controls['opcion4']"

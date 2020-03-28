@@ -37,7 +37,7 @@ export class GeneracionExamenesComponent implements OnInit {
   cargando: boolean
   miClave = false
   selected: string
-  selectedValue: number;
+  selectedValue: string;
 
   preguntaActual: Pregunta;
   opcionesActuales: Opcion[]
@@ -138,8 +138,12 @@ export class GeneracionExamenesComponent implements OnInit {
 
     this.preguntaActual = this.preguntas.find(obj => obj.numero == numero)
     console.log("Modificaras esta pregunta" + JSON.stringify(this.preguntaActual));
-
-
+this.preguntaActual.opciones.forEach(opcion=>{
+  if(opcion.acierto){
+    this.selectedValue=opcion.titulo
+    console.log("POuto "+this.selectedValue)
+  }
+})
     this.indiceTab = 1
 
 
@@ -150,11 +154,12 @@ export class GeneracionExamenesComponent implements OnInit {
   actualizarReactivo() {
     console.log("El valor seleccionado econ formulario  " + this.form.get('selectedValue').value)
     let indice = this.form.get('selectedValue').value
-    // console.log("El valor seleccionado con selectedvalue  "+this.selectedValue)
+
+    console.log("El valor seleccionado con selectedvalue  "+this.selectedValue)
     //Ajustamos la correcta si es o no que cambió
-    this.preguntaActual.opciones.forEach((opcion, i) => {
-      if (i == indice) {
-        opcion.acierto = true
+   this.preguntaActual.opciones.forEach((opcion, i) => {
+     if (opcion.titulo==this.selectedValue) {
+       opcion.acierto=true
       } else {
         opcion.acierto = false
       }
