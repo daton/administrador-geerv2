@@ -39,19 +39,19 @@ export class GeneracionExamenesComponent implements OnInit {
   selected: string
   selectedValue: number;
 
-  preguntaActual:Pregunta;
-  opcionesActuales:Opcion[]
+  preguntaActual: Pregunta;
+  opcionesActuales: Opcion[]
 
 
   estatus: Estatus = {}
   //Ojito
   hide = true;
-  id:string
+  id: string
 
   bloqueExamen: any[] = [{ nombre: 'b1', nombreLargo: 'Bloque 1' }, { nombre: 'b2', nombreLargo: 'Bloque 2' }, { nombre: 'b3', nombreLargo: 'Bloque 3' }]
   bloque: string
   examen: Examen = {}
-mostrarFormulario:boolean
+  mostrarFormulario: boolean
 
 
   public form: FormGroup;
@@ -66,9 +66,9 @@ mostrarFormulario:boolean
 
 
   preguntas: Pregunta[] = []
- 
+
   searchText: any;
-  displayedColumns: string[] = ['numero','titulo'];
+  displayedColumns: string[] = ['numero', 'titulo'];
 
 
   constructor(private fb: FormBuilder, private http: HttpClient, private breakpointObserver: BreakpointObserver) {
@@ -76,55 +76,46 @@ mostrarFormulario:boolean
     //El siguiente breakpoint es para hacer responsiva cada fila
     breakpointObserver.observe(['(max-width: 600px)']).subscribe(result => {
       this.displayedColumns = result.matches ?
-        ['numero','titulo'] :
-        ['numero','titulo'];
+        ['numero', 'titulo'] :
+        ['numero', 'titulo'];
     });
   }
 
 
   ngOnInit() {
     this.mostrarPreguntas = false
-    this.mostrarFormulario=false
-  
+    this.mostrarFormulario = false
+    this.iniciarFormulario()
+
 
   }
 
   cargarReactivos(materia: string, bloque: any) {
-   // this.examen = {}
+  
     console.log("Son " + materia + "-" + bloque.nombre)
     this.id = materia + "-" + bloque.nombre
     this.http.get<Examen>(Globales.urlBase + '/examen-profesor/' + this.id).subscribe(
       examen => {
         this.examen = examen;
         this.preguntas = this.examen.preguntas
-  
 
-  
 
-      let indice=1
-      
 
-      this.dataSource = new MatTableDataSource(this.preguntas);
 
-      setTimeout(() => {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      }, 1200)
+        //let indice = 1
 
-        //Iniciamos despues el formulario
-        this.form = this.fb.group({
-          titulo: [
-            null,
-            Validators.compose([
-              Validators.required, /*CustomValidators.equal("123")*/
 
-            ])
-          ],
+        this.dataSource = new MatTableDataSource(this.preguntas);
 
-        });
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }, 1200)
+
+       
         //Mostramos la tabla
         this.mostrarPreguntas = true
-        console.log(JSON.stringify('malaaaaaa'+JSON.stringify(this.preguntas)));
+        console.log(JSON.stringify('malaaaaaa' + JSON.stringify(this.preguntas)));
       }
     )
 
@@ -141,43 +132,65 @@ mostrarFormulario:boolean
 
   }
   modificar(numero: number) {
-    this.mostrarFormulario=true;
-    this.indiceTab = 1
-      this.preguntaActual = this.preguntas.find(obj => obj.numero == numero)
+ 
+    this.mostrarFormulario = true;
+   
+
+    this.preguntaActual = this.preguntas.find(obj => obj.numero == numero)
     console.log("Modificaras esta pregunta" + JSON.stringify(this.preguntaActual));
 
 
-    //Ajustamos los valore en cada uno de los campos
-  this.opcionesActuales= this.preguntaActual.opciones
-  //Vemos la opcion que es correcta
-  this.opcionesActuales.forEach((opcion,i)=>{
-    if(opcion.acierto){
-      this.selectedValue=i
-    }
-  })
+    this.indiceTab = 1
 
-  //Inicializamos el formulario
-  this.iniciarFormulario();
-  
-      
-    
-        
+
+
+
   }
 
-  actualizarReactivo(){
-    console.log("El valor seleccionado econ formulario  "+this.form.get('selectedValue').value)
- // console.log("El valor seleccionado con selectedvalue  "+this.selectedValue)
+  actualizarReactivo() {
+    console.log("El valor seleccionado econ formulario  " + this.form.get('selectedValue').value)
+    let indice = this.form.get('selectedValue').value
+    // console.log("El valor seleccionado con selectedvalue  "+this.selectedValue)
+    //Ajustamos la correcta si es o no que cambió
+    this.preguntaActual.opciones.forEach((opcion, i) => {
+      if (i == indice) {
+        opcion.acierto = true
+      } else {
+        opcion.acierto = false
+      }
+    })
+console.log("El id a enviar es "+this.id);
+console.log("La pregunta a esviar es "+JSON.stringify(this.preguntaActual));
+    this.http.post<Estatus>(Globales.urlBase+"/examen-profesor/reactivo/"+this.id, this.preguntaActual).subscribe(
+      estatus=>{
+        this.estatus=estatus;
+        console.log("El estatus del reactivo es"+this.estatus.mensaje);
+            
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado',
+          text: this.estatus.mensaje,
+        })
+       // this.obtenerPreguntas();
+       
+        
+      }
+    )
+//Limpiamos la pregunta actual
+
+
 
   }
   //Metodo para inicia el formulario
-  iniciarFormulario(){
+  iniciarFormulario() {
     this.form = this.fb.group({
 
       selectedValue: [
-        
-      
-        
-      ], 
+
+
+
+      ],
       numero: [
         null,
         Validators.compose([
@@ -207,7 +220,7 @@ mostrarFormulario:boolean
         Validators.compose([Validators.required])
       ]
     });
-//Inicializamos a los profesores
+    //Inicializamos a los profesores
   }
 
 
@@ -217,7 +230,7 @@ mostrarFormulario:boolean
     this.indiceTab = clickedIndex
     console.log("cambio" + clickedIndex);
     if (clickedIndex == 0) {
-      
+
       this.obtenerPreguntas()
     }
 
@@ -231,8 +244,8 @@ mostrarFormulario:boolean
     this.agregado = true
   }
   obtenerPreguntas() {
-    this.examen = {}
-  
+ 
+
     this.http.get<Examen>(Globales.urlBase + '/examen-profesor/' + this.id).subscribe(
       examen => {
         this.examen = examen;
@@ -242,16 +255,8 @@ mostrarFormulario:boolean
 
 
         //Iniciamos despues el formulario
-        this.form = this.fb.group({
-          titulo: [
-            null,
-            Validators.compose([
-              Validators.required, /*CustomValidators.equal("123")*/
-
-            ])
-          ],
-
-        });
+        //this.iniciarFormulario()
+      
         //Mostramos la tabla
         this.mostrarPreguntas = true
       }
@@ -259,19 +264,19 @@ mostrarFormulario:boolean
   }
   guardarProfesor() {
 
-  //  console.log("Profesor a guardar es " + JSON.stringify(this.profesor));
+    //  console.log("Profesor a guardar es " + JSON.stringify(this.profesor));
 
-   // this.http.put<Estatus>(Globales.urlBase + '/profesor', this.profesor).subscribe(
-     // estatus => {
-      //  this.estatus = estatus
-        //this.profesor = this.estatus.profesor
+    // this.http.put<Estatus>(Globales.urlBase + '/profesor', this.profesor).subscribe(
+    // estatus => {
+    //  this.estatus = estatus
+    //this.profesor = this.estatus.profesor
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Actualizado',
-          text: this.estatus.mensaje,
-        })
-     // })
+    Swal.fire({
+      icon: 'success',
+      title: 'Actualizado',
+      text: this.estatus.mensaje,
+    })
+    // })
 
 
     //Para que se refresquen los alumnos ya con el guardaro
