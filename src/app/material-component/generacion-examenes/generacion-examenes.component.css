@@ -34,3 +34,6 @@
   .mat-row:not(:nth-child(2n+1)){
     background-color:#ffffff;
   }
+  .arreglar{
+      text-align: left;
+  }
