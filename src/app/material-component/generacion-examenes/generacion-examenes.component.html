@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card  *ngIf="mostrarSeleccionarMateria">
 	<mat-card-content>
 		<mat-card-title class="mb-3">Selecciona una materia</mat-card-title>
 		<mat-form-field>
@@ -27,8 +27,11 @@
 	<div fxFlex.gt-sm="100%" fxFlex="100">
 		<mat-card>
 			<mat-card-content>
-				<mat-card-title>Preguntas totales: {{preguntas.length}}</mat-card-title>
+				<button  mat-raised-button color="primary" (click)="irAMostrarMateria()" >Regresar </button>
+				<br><br>
+				<mat-card-title>Preguntas totales: {{preguntas.length}} del examen {{id}}</mat-card-title>
 			</mat-card-content>
+			<p>Para modificar o editar una pregunta da click en el botón de número, para crear una nueva da click en el botón de Nuevo reactivo</p>
 			<mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab"
 				(selectedTabChange)="onTabChanged($event);">
 				<!--PRIMR TAB DEL LISTADO DE TODOS LOS PROFESORES-->
@@ -38,8 +41,9 @@
 					<div class="demo-tab-content text-center">
 						<!-- AQUI VA EL LISTADO DE TODOS LOS PROFESORES DADOS DE ALTA-->
 						<!--EMPIEZA TABLA E MOSTRADO DE TODOS LOS PROFESORES-->
-
-						<p>Preguntas del examen seleccionado
+						<button  mat-raised-button color="primary" (click)="nuevoReactivo()" >Nuevo reactivo</button>
+						
+						<p>Preguntas del examen seleccionado {{id}}
 						</p>
 						<mat-form-field>
 							<input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
@@ -54,7 +58,7 @@
 									<mat-cell *matCellDef="let pregunta">
 
 										<button mat-button class="fondo" (click)="modificar(pregunta.numero)">
-											<mat-icon>person</mat-icon>
+											<mat-icon>create</mat-icon>
 											{{pregunta.numero}}
 										</button>
 
@@ -76,10 +80,10 @@
 										<div class="arreglar">
 											<br>
 											{{pregunta.titulo}}
-											<br>a) {{pregunta.opciones[0].titulo}}
-											<br>b) {{pregunta.opciones[1].titulo}}
-											<br>c) {{pregunta.opciones[2].titulo}}
-											<br>d) {{pregunta.opciones[3].titulo}}
+											<br><span [ngClass]="pregunta.opciones[0].acierto ? 'buena':'mala'" >a) {{pregunta.opciones[0].titulo}}</span>
+											<br><span [ngClass]="pregunta.opciones[1].acierto ? 'buena':'mala'">b) {{pregunta.opciones[1].titulo}}</span>
+											<br><span [ngClass]="pregunta.opciones[2].acierto ? 'buena':'mala'">c) {{pregunta.opciones[2].titulo}}</span>
+											<br><span [ngClass]="pregunta.opciones[3].acierto ? 'buena':'mala'">d) {{pregunta.opciones[3].titulo}}</span>
 										</div>
 									</mat-cell>
 								</ng-container>
@@ -116,7 +120,8 @@
 								<div fxFlex.gt-sm="100" fxFlex="100">
 									<mat-card>
 										<mat-card-content>
-											<mat-card-title>Datos del Profesor</mat-card-title>
+											<mat-card-title></mat-card-title>
+								<p>Escribe  el titulo de la pregunta y las opciones, selecciona en el boton de radio de cada opcion la que corresponda a la opción correcta.</p>
 											<!-- ============================================================== -->
 											<!-- column -->
 											<!-- ============================================================== -->
@@ -144,7 +149,7 @@
 															<textarea matInput placeholder="Título"
 															cdkTextareaAutosize
 															#autosize="cdkTextareaAutosize"
-															cdkAutosizeMinRows="1"
+															cdkAutosizeMinRows="2"
             												cdkAutosizeMaxRows="12"
 																[formControl]="form.controls['titulo']" name="titulo"
 																[(ngModel)]="preguntaActual.titulo"></textarea>

@@ -1,8 +1,8 @@
 .mat-column-numero {
     word-wrap: break-word !important;
     white-space: unset !important;
-    flex: 0 0 8% !important;
-    width: 8% !important;
+    flex: 0 0 15% !important;
+    width: 15% !important;
     overflow-wrap: break-word;
     word-wrap: break-word;
   
@@ -36,4 +36,10 @@
   }
   .arreglar{
       text-align: left;
+  }
+  .buena{
+    color:red;
+  }
+  .mala{
+    color:black;
   }

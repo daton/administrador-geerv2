@@ -27,6 +27,10 @@ import { MensajeriaComponent } from './mensajeria/mensajeria.component';
 import { AlumnosTotalesComponent } from './alumnos-totales/alumnos-totales.component';
 import { AngularFileUploaderModule } from "angular-file-uploader";
 import { FileUploadModule } from 'ng2-file-upload';
+import { VgCoreModule } from 'videogular2/compiled/core';
+import { VgControlsModule } from 'videogular2/compiled/controls';
+import { VgOverlayPlayModule } from 'videogular2/compiled/overlay-play';
+import { VgBufferingModule } from 'videogular2/compiled/buffering';
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +41,9 @@ import { FileUploadModule } from 'ng2-file-upload';
     FileUploadModule,
     FlexLayoutModule,
     AngularFileUploaderModule,
-    CdkTableModule
+    CdkTableModule,
+    VgCoreModule,VgControlsModule,VgOverlayPlayModule,VgBufferingModule
+    
   ],
   providers: [],
   

@@ -1,5 +1,18 @@
 
-    <div class="demo-tab-content text-center" >
+    <div fxLayout="row wrap">
+      <!-- Card column -->
+      <div fxFlex.gt-sm="100" fxFlex="100">
+        <mat-card>
+          <mat-card-content>
+            <mat-card-title>Alumnos totales</mat-card-title>
+            <button  mat-raised-button color="primary" (click)="cargarAlumnos()">Cargar Alumnos</button>
+            <p *ngIf="cargando">Esta operación puede tardar un poco, espere por favor.</p>
+            </mat-card-content>
+            </mat-card>
+            </div>
+            </div>
+    <!--Alumnos totales inicia-->
+    <div class="demo-tab-content text-center" *ngIf="cargandoAlumnos" >
       <!-- AQUI VA EL LISTADO DE TODOS LOS PROFESORES DADOS DE ALTA-->
       <!--EMPIEZA TABLA E MOSTRADO DE TODOS LOS PROFESORES-->
       <h4>El cargado de alumnos puede tardar un poco. Espere por favor...</h4>
@@ -16,6 +29,14 @@
             <mat-header-cell *matHeaderCellDef  mat-sort-header> Clave. </mat-header-cell>
             <mat-cell *matCellDef="let alumno">         
                  {{alumno.clave}}     
+            </mat-cell>
+          </ng-container>
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="claveProfesor">
+            <mat-header-cell *matHeaderCellDef  mat-sort-header> Clave prof. </mat-header-cell>
+            <mat-cell *matCellDef="let alumno">         
+                 {{alumno.claveProfesor}}     
             </mat-cell>
           </ng-container>
 

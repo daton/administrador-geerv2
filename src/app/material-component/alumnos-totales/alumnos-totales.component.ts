@@ -24,6 +24,8 @@ export class AlumnosTotalesComponent implements OnInit {
 
   miClaveAlumno: string
   public form: FormGroup;
+  cargandoAlumnos:boolean
+  cargando:boolean
   //Campos del listado
 
   //Ojito
@@ -36,7 +38,7 @@ export class AlumnosTotalesComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   dataSource: MatTableDataSource<Alumno>
 
-  displayedColumns = ['clave', 'nombre', 'usuario', 'password', 'fecha'];
+  displayedColumns = ['clave','claveProfesor', 'nombre', 'usuario', 'password', 'fecha'];
 
   alumnos: Alumno[] = []
 
@@ -70,15 +72,16 @@ export class AlumnosTotalesComponent implements OnInit {
     //El siguiente breakpoint es para hacer responsiva cada fila
     breakpointObserver.observe(['(max-width: 600px)']).subscribe(result => {
       this.displayedColumns = result.matches ?
-        ['clave', 'nombre', 'usuario', 'password', 'fecha'] :
-        ['clave', 'nombre', 'usuario', 'password', 'fecha'];
+        ['clave','claveProfesor', 'nombre', 'usuario', 'password', 'fecha'] :
+        ['clave','claveProfesor', 'nombre', 'usuario', 'password', 'fecha'];
     });
 
 
   }
 
   ngOnInit() {
-
+this.cargandoAlumnos=false;
+this.cargando=false
     //ControladorAlumno
 
     this.http.get<Alumno[]>(Globales.urlBase + "/alumno").subscribe(
@@ -104,6 +107,29 @@ export class AlumnosTotalesComponent implements OnInit {
     this.dataSource.sort = this.sort;
 
 
+
+
   }
+
+  cargarAlumnos(){
+    this.cargando=true
+    this.http.get<Alumno[]>(Globales.urlBase + "/alumno").subscribe(
+      profesores => {
+        this.alumnos = profesores;
+        this.dataSource = new MatTableDataSource(this.alumnos);
+        this.cargandoAlumnos=true
+        this.cargando=false
+
+        //this.dataSource.paginator = this.paginator;
+        //  this.dataSource.sort = this.sort;
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }, 1200)
+
+      })
+  }
+
+  
 
 }

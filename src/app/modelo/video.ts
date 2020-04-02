@@ -1,8 +1,12 @@
 export interface Video {
 
-        videourl?:string
-        titulo?:string
-        descripcion?:string
+      
+        nombre?:string
+     
+        bloque?:string
+        nombreCurso?:string
+        url?:string
+        ciclo?:number
        }
        
 

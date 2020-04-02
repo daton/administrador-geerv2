@@ -1,31 +1,59 @@
 <div>
-    <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit()">      
-      <div>
+  <h4>Subir videos</h4>
+  <p>Para subir video primero selecciona el video en formato MP4, posteriormente del menu de selección 
+    escoge la información del video y finalmente oprime el botón subir. Dependiendo del tamaño del video se mostrará
+     el procentaje de cargado y al final se mostrará el video para que verifiques que se subió correctamente.
+  </p>
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+    <div>
 
-        
-        <label class="custom-file-upload">
+
+      <label class="custom-file-upload">
         <input type="file" name="file" (change)="onFileSelect($event)" />
         <i class="fa fa-cloud-upload"></i> Seleccionar Video
       </label>
-       
-        <button type="submit"  mat-raised-button color="primary">Subir</button>
-        {{archivaldo}}
-        <br>
-        {{porcentaje}}
-      </div>
-  
-       
-     
-    </form>
-  </div>
-  <div fxLayout="row" *ngIf="cargando">
-    <div fxFlex.gt-sm="100%">
-        <mat-card>
-            <mat-card-content>
-                <mat-card-title>Cargando...</mat-card-title>
-              
-                <mat-progress-bar mode="indeterminate" value="40"></mat-progress-bar>
-            </mat-card-content>
-        </mat-card>
+
+      <mat-form-field>
+        <mat-select placeholder="Seleccione información del curso" name="nombre" [(value)]="nombreVideo">
+          <mat-option *ngFor="let video of videos_inf" [(value)]="video.url">
+            {{video.nombre}}, {{video.nombreCurso}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+
+
+
+
+
+      <button type="submit" mat-raised-button color="primary">Subir</button>
+      {{archivaldo}}
+      <br>
+    <span *ngIf="cargando" >Espere por favor  </span> {{porcentaje}}
     </div>
+
+
+
+  </form>
 </div>
+<div fxLayout="row" *ngIf="cargando">
+  <div fxFlex.gt-sm="100%">
+    <mat-card>
+      <mat-card-content>
+        <mat-card-title>Cargando...</mat-card-title>
+
+        <mat-progress-bar mode="indeterminate" value="40"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<BR>
+  
+<br>
+<vg-player *ngIf="cargadoConExito">
+  <video [vgMedia]="media" #media id="singleVideo" #videoPlayer   preload="auto" controls  style="width: 100%;height: auto;" >
+    
+    <source [src]="videourl" type="video/mp4">
+  </video>
+</vg-player>

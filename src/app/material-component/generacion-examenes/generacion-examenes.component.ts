@@ -38,6 +38,7 @@ export class GeneracionExamenesComponent implements OnInit {
   miClave = false
   selected: string
   selectedValue: string;
+  paraActualizar:boolean;
 
   preguntaActual: Pregunta;
   opcionesActuales: Opcion[]
@@ -52,6 +53,7 @@ export class GeneracionExamenesComponent implements OnInit {
   bloque: string
   examen: Examen = {}
   mostrarFormulario: boolean
+  mostrarSeleccionarMateria: boolean
 
 
   public form: FormGroup;
@@ -83,6 +85,7 @@ export class GeneracionExamenesComponent implements OnInit {
 
 
   ngOnInit() {
+    this.mostrarSeleccionarMateria = true
     this.mostrarPreguntas = false
     this.mostrarFormulario = false
     this.iniciarFormulario()
@@ -91,7 +94,9 @@ export class GeneracionExamenesComponent implements OnInit {
   }
 
   cargarReactivos(materia: string, bloque: any) {
-  
+
+this.mostrarSeleccionarMateria=false
+
     console.log("Son " + materia + "-" + bloque.nombre)
     this.id = materia + "-" + bloque.nombre
     this.http.get<Examen>(Globales.urlBase + '/examen-profesor/' + this.id).subscribe(
@@ -112,9 +117,10 @@ export class GeneracionExamenesComponent implements OnInit {
           this.dataSource.sort = this.sort;
         }, 1200)
 
-       
+
         //Mostramos la tabla
         this.mostrarPreguntas = true
+        this.mostrarSeleccionarMateria = false;
         console.log(JSON.stringify('malaaaaaa' + JSON.stringify(this.preguntas)));
       }
     )
@@ -132,18 +138,18 @@ export class GeneracionExamenesComponent implements OnInit {
 
   }
   modificar(numero: number) {
- 
+  this.paraActualizar=true
     this.mostrarFormulario = true;
-   
+
 
     this.preguntaActual = this.preguntas.find(obj => obj.numero == numero)
     console.log("Modificaras esta pregunta" + JSON.stringify(this.preguntaActual));
-this.preguntaActual.opciones.forEach(opcion=>{
-  if(opcion.acierto){
-    this.selectedValue=opcion.titulo
-    console.log("POuto "+this.selectedValue)
-  }
-})
+    this.preguntaActual.opciones.forEach(opcion => {
+      if (opcion.acierto) {
+        this.selectedValue = opcion.titulo
+        console.log("POuto " + this.selectedValue)
+      }
+    })
     this.indiceTab = 1
 
 
@@ -152,37 +158,57 @@ this.preguntaActual.opciones.forEach(opcion=>{
   }
 
   actualizarReactivo() {
+   
     console.log("El valor seleccionado econ formulario  " + this.form.get('selectedValue').value)
     let indice = this.form.get('selectedValue').value
 
-    console.log("El valor seleccionado con selectedvalue  "+this.selectedValue)
+    console.log("El valor seleccionado con selectedvalue  " + this.selectedValue)
     //Ajustamos la correcta si es o no que cambió
-   this.preguntaActual.opciones.forEach((opcion, i) => {
-     if (opcion.titulo==this.selectedValue) {
-       opcion.acierto=true
+    this.preguntaActual.opciones.forEach((opcion, i) => {
+      if (opcion.titulo == this.selectedValue) {
+        opcion.acierto = true
       } else {
         opcion.acierto = false
       }
     })
-console.log("El id a enviar es "+this.id);
-console.log("La pregunta a esviar es "+JSON.stringify(this.preguntaActual));
-    this.http.post<Estatus>(Globales.urlBase+"/examen-profesor/reactivo/"+this.id, this.preguntaActual).subscribe(
-      estatus=>{
-        this.estatus=estatus;
-        console.log("El estatus del reactivo es"+this.estatus.mensaje);
-            
+    console.log("El id a enviar es " + this.id);
+    console.log("La pregunta a esviar es " + JSON.stringify(this.preguntaActual));
+
+//para actualizar
+    if(this.paraActualizar){
+      console.log("PARA ACTUALIZAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1")
+
+    this.http.put<Estatus>(Globales.urlBase + "/examen-profesor/reactivo/" + this.id, this.preguntaActual).subscribe(
+      estatus => {
+        this.estatus = estatus;
+        console.log("El estatus del reactivo es" + this.estatus.mensaje);
+
 
         Swal.fire({
           icon: 'success',
           title: 'Actualizado',
           text: this.estatus.mensaje,
         })
-       // this.obtenerPreguntas();
-       
-        
-      }
-    )
-//Limpiamos la pregunta actual
+        // this.obtenerPreguntas();
+   } )
+   //PARA GUARDAR UNO REACTIVO NUEVO
+  }else{
+    console.log("PARA GAURDAR NUEVO")
+    this.http.post<Estatus>(Globales.urlBase + "/examen-profesor/reactivo/" + this.id, this.preguntaActual).subscribe(
+      estatus => {
+        this.estatus = estatus;
+        console.log("El estatus del reactivo es" + this.estatus.mensaje);
+
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado',
+          text: this.estatus.mensaje,
+        })
+        // this.obtenerPreguntas();
+   } )
+  }
+    //Limpiamos la pregunta actual
 
 
 
@@ -249,7 +275,7 @@ console.log("La pregunta a esviar es "+JSON.stringify(this.preguntaActual));
     this.agregado = true
   }
   obtenerPreguntas() {
- 
+
 
     this.http.get<Examen>(Globales.urlBase + '/examen-profesor/' + this.id).subscribe(
       examen => {
@@ -261,7 +287,7 @@ console.log("La pregunta a esviar es "+JSON.stringify(this.preguntaActual));
 
         //Iniciamos despues el formulario
         //this.iniciarFormulario()
-      
+
         //Mostramos la tabla
         this.mostrarPreguntas = true
       }
@@ -293,6 +319,29 @@ console.log("La pregunta a esviar es "+JSON.stringify(this.preguntaActual));
     console.log("Se borrara" + email)
 
     this.obtenerPreguntas()
+  }
+
+  irAMostrarMateria() {
+    this.mostrarSeleccionarMateria = true
+    this.mostrarPreguntas = false
+    this.mostrarFormulario = false
+  }
+
+  nuevoReactivo() {
+
+    this.paraActualizar=false;
+    this.preguntaActual = {}
+    this.preguntaActual.numero=this.examen.preguntas.length+1
+let opciones:Opcion[]=[{titulo:'',acierto:false},{titulo:'',acierto:false},{titulo:'',acierto:false},{titulo:'',acierto:false}]
+this.preguntaActual.opciones=opciones
+this.preguntaActual.titulo=null
+    this.mostrarFormulario = true;
+
+
+
+    this.indiceTab = 1
+
+
   }
 
 }
