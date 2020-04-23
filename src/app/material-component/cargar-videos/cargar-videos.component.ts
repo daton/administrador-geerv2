@@ -10,7 +10,7 @@ import { VgAPI } from 'videogular2/compiled/core'
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Estatus } from '../../modelo/estatus';
 //const URL = "http://192.168.100.85:8080/api/archivalda"
-const URL = "https://admingeer.herokuapp.com//api/archivalda"
+const URL = "https://admingeer.herokuapp.com/api/archivalda"
 @Component({
   selector: 'app-cargar-videos',
   templateUrl: './cargar-videos.component.html',
@@ -140,7 +140,10 @@ nombreVideo:string
         console.log(`File is ${percentDone}% uploaded.`);
       } else if (event instanceof HttpResponse) {
 
-        this.videourl="https://geducativoedi.com.mx/video/"+this.nombreVideo;
+        //La siguiente new Date que concatenamos es un cache breaker es importantisimo para poder
+        //refreshcar el recurso de la url sobre la misma url una vez que se actualiza el video que se subió
+        this.videourl="https://geducativoedi.com.mx/video/"+this.nombreVideo+"?"+new Date().getTime();
+        
         console.log("Linnk de puto video "+this.videourl)
         console.log('Se completó la subida del archivo!');
         this.completado='Se completó la subida del archivo!'
