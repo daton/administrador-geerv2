@@ -1,6 +1,6 @@
 export class GeneradorClave {
+    materia?:string
     prefijo?:string
-    cifras?:number
     ano?:string
     ciclo?:string
     numero?:number

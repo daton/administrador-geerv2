@@ -4,7 +4,7 @@
     <mat-card>
       <mat-card-content>
         <mat-card-title>Generación de Claves de asignaturas</mat-card-title>
-        
+
       </mat-card-content>
       <mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab" (selectedTabChange)="onTabChanged($event);">
         <!--PRIMR TAB DEL LISTADO DE TODOS LOS PROFESORES-->
@@ -28,71 +28,120 @@
                       <p>Selecciona la información requerida para el algoritmo generador de códigos</p>
                       <form [formGroup]="form">
 
-                          <div fxLayout="row wrap">
-                            <!--Campo prefijo-->
-                            <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
-                              <mat-form-field>
-                                <input matInput placeholder="Escriba el prefijo" [formControl]="form.controls['prefijo']"    name="prefijo">
-                              </mat-form-field>
-                              <mat-hint *ngIf="form.controls['prefijo'].hasError('required') && form.controls['prefijo'].touched" class="text-danger font-14">Debe escribir el prefijo </mat-hint>
-                         
-                            </div>
-                  
-                            <!--Campo cifras-->
-                            <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
-                              <mat-form-field>
-                                <input matInput placeholder="Cifras (recomendado: 6)" [formControl]="form.controls['cifras']"  name="cifras" type="number" >
-                              </mat-form-field>
-                              <small *ngIf="form.controls['cifras'].hasError('required') && form.controls['cifras'].touched" class="text-danger font-14">Debe seleccionar las cifras</small>
-                       
-                            </div>
+                        <div fxLayout="row wrap">
+                          <!--Campo prefijo-->
+                          <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                            <mat-form-field>
+                              <mat-select placeholder="seleccione la materia" [formControl]="form.controls['materias']"
+                                name="materias">
+                                <mat-option *ngFor="let materia of listaMaterias" [value]="materia">{{materia.nombre}},
+                                  {{materia.prefijo}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <small
+                              *ngIf="form.controls['materias'].hasError('required') && form.controls['materias'].touched"
+                              class="text-danger font-14">Debes seleccionar la materia</small>
 
-                            <!--Campo numero de claves-->
-                            <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
-                              <mat-form-field>
-                                <input matInput placeholder="Número de claves" [formControl]="form.controls['numero']"  name="numero" type="number" >
-                              </mat-form-field>
-                              <small *ngIf="form.controls['numero'].hasError('required') && form.controls['numero'].touched" class="text-danger font-14">Debes escribir el numero de claves</small>
-                       
-                            </div>
-  
-                           
-                            <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
-                              <mat-form-field>
-                                <mat-select placeholder="Año" [formControl]="form.controls['anos']"   name="anos" >
-                                  <mat-option *ngFor="let ano of listaAnos" [value]="ano">{{ano}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                              <small *ngIf="form.controls['anos'].hasError('required') && form.controls['anos'].touched" class="text-danger font-14">Debes seleccionar  el año</small>
-                         
-                            </div>
-                          
-                            <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
-                              <mat-form-field>
-                                <mat-select placeholder="Ciclo" [formControl]="form.controls['ciclos']"  name="ciclos" >
-                                  <mat-option *ngFor="let ciclo of listaCiclos" [value]="ciclo">{{ciclo}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                              <small *ngIf="form.controls['ciclos'].hasError('required') && form.controls['ciclos'].touched" class="text-danger font-14">Debe seleccionar el ciclo</small>
-                             
-                            </div>
-                          
                           </div>
-                    
-                          <mat-card-actions>
-                            <button mat-raised-button color="primary" (click)="generarClaves()"  type="submit" [disabled]="!form.valid">Generar claves</button>
-                          </mat-card-actions>
-                        </form>
+
+
+
+                          <!--Campo numero de claves-->
+                          <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                            <mat-form-field>
+                              <input matInput placeholder="Número de claves" [formControl]="form.controls['numero']"
+                                name="numero" type="number">
+                            </mat-form-field>
+                            <small
+                              *ngIf="form.controls['numero'].hasError('required') && form.controls['numero'].touched"
+                              class="text-danger font-14">Debes escribir el numero de claves</small>
+
+                          </div>
+
+
+                          <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                            <mat-form-field>
+                              <mat-select placeholder="Año" [formControl]="form.controls['anos']" name="anos">
+                                <mat-option *ngFor="let ano of listaAnos" [value]="ano">{{ano}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <small *ngIf="form.controls['anos'].hasError('required') && form.controls['anos'].touched"
+                              class="text-danger font-14">Debes seleccionar el año</small>
+
+                          </div>
+
+                          <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                            <mat-form-field>
+                              <mat-select placeholder="Ciclo" [formControl]="form.controls['ciclos']" name="ciclos">
+                                <mat-option *ngFor="let ciclo of listaCiclos" [value]="ciclo">{{ciclo}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <small
+                              *ngIf="form.controls['ciclos'].hasError('required') && form.controls['ciclos'].touched"
+                              class="text-danger font-14">Debe seleccionar el ciclo</small>
+
+                          </div>
+
+                        </div>
+
+                        <mat-card-actions>
+                          <button mat-raised-button color="primary" (click)="generarClaves()" type="submit"
+                            [disabled]="!form.valid">Generar claves</button>
+                        </mat-card-actions>
+                      </form>
                     </mat-card-content>
                   </mat-card>
                 </div>
               </div>
 
             </div>
+            <div *ngIf="estaEnviando">
+              Esta operación puede tardar hasta 10 minutos o mas dependiendo de su conexión y de si las claves generadas
+              son
+              más de 1000, espere por favor...
+              <mat-progress-bar mode="indeterminate" value="40"></mat-progress-bar>
+            </div>
+
           </div>
         </mat-tab>
         <!--TERMINA TAB DE GENERACIÓN DE CÓDIGOS--------------------------------------------------------------->
         <!----------------------------------------------------------------------------------------------->
+        <!--INICIA TAB PARA DESCARGAR CLAVES EN EXCEL-->
+        <mat-tab label=Descargas>
+
+          <div class="demo-tab-content">
+            <!--INICIA ALTA PREOFESORES-->
+            <!--*************************************************************************************-->
+            <div>
+              <div fxLayout="row wrap">
+                <div fxFlex.gt-sm="100" fxFlex="100">
+                  <mat-card>
+                    <mat-card-content>
+                      <mat-card-title>Descargas de códigos generados</mat-card-title>
+                      <!-- ============================================================== -->
+                      <!-- column -->
+                      <!-- ============================================================== -->
+                      <p>Selecciona la materia y oprime el botón descargar los códigos de la misma:</p>
+                      <p><strong>Nota:</strong> Esta operación pued tardar hasta 15 minutos o mas, dependiendo de su cuántas claves sean, espere por favor.</p>
+                      
+                      
+                     
+                        <mat-select placeholder="Seleccione la materia a descargar códigos en EXCEL"  [(ngModel)]="miMateriaSeleccionada">
+                                <mat-option *ngFor="let materia of listaMaterias" [value]="materia">{{materia.nombre}}</mat-option>
+                              </mat-select>
+                   
+                      <mat-card-actions>
+                        <button mat-raised-button color="primary" (click)="descargarExcel()">Descargar Excel</button>
+                        {{mensaje}}
+                      </mat-card-actions>
+                      
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
 
       </mat-tab-group>
     </mat-card>
