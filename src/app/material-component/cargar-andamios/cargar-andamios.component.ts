@@ -14,6 +14,7 @@ export class CargarAndamiosComponent implements OnInit {
 
 
   quill: Quill
+  quillBuble:Quill
   content:any
   contenido:any
   editor:any
@@ -63,7 +64,7 @@ this.editor=this.quill.content
 
   creado2(event: Quill) {
     // tslint:disable-next-line:no-console
-    this.quill=event
+    this.quillBuble=event
     
    console.log("Invocando el quill-view")
    let jsonString=localStorage.getItem("contenido");
@@ -80,6 +81,7 @@ this.editor=this.quill.content
     console.log("Al oprimir el boton"+JSON.stringify(this.quill.content))
   this.editor.text="hola"
 this.contenido=this.quill.content
+this.quill.setContents(null)
   }
 
   cambiar(event:Quill) {
