@@ -7,11 +7,138 @@
         <mat-card-content>
           <mat-card-title>Claves totales:  {{claveprofesores.length}}</mat-card-title>
         </mat-card-content>
-        <p>En este apartado se administran las claves  de profesores en el sistema , se pueden dar de alta y de baja.<br>
-          Es importante saber que las claves mostradas aquí pueden estar  o no estar asociadas a un profesor registrado, para mayor información dar click en el
-          botón de la clave para saber si está o no asociada a un profesor registrado.        </p>
+        <p>En este apartado se <strong>crean</strong> las claves para ser registradas en el sistema como profesores .<br>
+           Las claves aún no serán asociadas a una cierta materia, esto sucederá al registrarse el profesor con la clave 
+            generada aquí. Una vez generada la clave puede ser buscada en la pestaña "Claves".
+          </p>
         <mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab" (selectedTabChange)="onTabChanged($event);">
-          <!--PRIMR TAB DEL LISTADO DE TODOS LOS PROFESORES-->
+         
+          <!-- TERMINA TAB DE TODOS LOS PROFSORES------------------------------------------------------->
+     <!--   <mat-tab label="Modificar" disabled>
+  
+
+              <div>
+                <div fxLayout="row wrap">
+                  <div fxFlex.gt-sm="100" fxFlex="100">
+                    <mat-card>
+                      <mat-card-content>
+                        <mat-card-title>Datos del Profesor</mat-card-title>
+                     
+                        <form [formGroup]="form">
+  
+                            <div fxLayout="row wrap">
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Clave de profesor" [formControl]="form.controls['claveProfesor']"     name="codigo" [(ngModel)]="claveProfesor.claveProfesor">
+                                </mat-form-field>
+                                <mat-hint *ngIf="form.controls['claveProfesor'].hasError('required') && form.controls['claveProfesor'].touched" class="text-danger font-14">Debe escribir la clave de profesor. </mat-hint>
+                             
+                                <mat-hint *ngIf="form.controls['fname'].hasError('minlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name must be at least 5 characters long.</mat-hint>
+                               <mat-hint *ngIf="form.controls['fname'].hasError('maxlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name cannot exceed 10 characters.</mat-hint>
+                              
+                              </div>
+                    
+                           
+                              
+                    
+                             
+                      
+                      
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Nombre" [formControl]="form.controls['nombre']"  name="nombre" [(ngModel)]="claveProfesor.nombre" >
+                                </mat-form-field>
+                                <small *ngIf="form.controls['nombre'].hasError('required') && form.controls['nombre'].touched" class="text-danger font-14">Debe proporcionar un nombre</small>
+                                <small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>
+                              </div>
+                            
+
+                      
+                             
+                            </div>
+                      
+                            <mat-card-actions>
+                              <button mat-raised-button color="primary" (click)="actualizarProfesor()"  type="submit" [disabled]="!form.valid">Actualizar</button>
+                            </mat-card-actions>
+                          </form>
+                      </mat-card-content>
+                    </mat-card>
+                  </div>
+                </div>
+  
+              </div>
+              
+            </div>
+          </mat-tab>-->
+          <!--TERMINA TAB DE ALTA DE PROFESORE--------------------------------------------------------------->
+          <!----------------------------------------------------------------------------------------------->
+  
+          <!--INICIA TAB PARA CREAR UNA NUEVA CLAVE DE PROFESOR-->
+          <mat-tab label="Crear nueva">
+  
+            <div class="demo-tab-content">
+              <!--INICIA guardar clave de PREOFESORES-->
+              <!--*************************************************************************************-->
+              <div>
+                <div fxLayout="row wrap">
+                  <div fxFlex.gt-sm="100" fxFlex="100">
+                    <mat-card>
+                      <mat-card-content>
+                        <mat-card-title>Datos de la nueva clave</mat-card-title>
+                        <p>La clave es obligatoria, el nombre es opcional, pero se recomienda asignarle uno.</p>
+                        <!-- ============================================================== -->
+                        <!-- column -->
+                        <!-- ============================================================== -->
+                        <form [formGroup]="form">
+  
+                            <div fxLayout="row wrap">
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Clave de profesor" [formControl]="form.controls['claveProfesor']"     name="codigo" [(ngModel)]="claveProfesor.claveProfesor">
+                                </mat-form-field>
+                                <mat-hint *ngIf="form.controls['claveProfesor'].hasError('required') && form.controls['claveProfesor'].touched" class="text-danger font-14">Debe escribir la clave de profesor. </mat-hint>
+                             
+                              <!--  <mat-hint *ngIf="form.controls['fname'].hasError('minlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name must be at least 5 characters long.</mat-hint>
+                               <mat-hint *ngIf="form.controls['fname'].hasError('maxlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name cannot exceed 10 characters.</mat-hint>
+                              -->
+                              </div>
+                    
+                           
+                              
+                    
+                             
+                      
+                      
+                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                                <mat-form-field>
+                                  <input matInput placeholder="Nombre" [formControl]="form.controls['nombre']"  name="nombre" [(ngModel)]="claveProfesor.nombre" >
+                                </mat-form-field>
+                                <small *ngIf="form.controls['nombre'].hasError('required') && form.controls['nombre'].touched" class="text-danger font-14">Debe proporcionar un nombre</small>
+                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
+                              </div>
+                            
+
+                      
+                             
+                            </div>
+                      
+                            <mat-card-actions>
+                              <button mat-raised-button color="primary" (click)="guardarClaveProfesor()"  type="submit" [disabled]="!form.valid">Guardar clave</button>
+                            </mat-card-actions>
+                          </form>
+                      </mat-card-content>
+                    </mat-card>
+                  </div>
+                </div>
+  
+              </div>
+              <!--TERMINA ALTA PROFESORES-->
+              <!--***************************************************************************************-->
+  
+            </div>
+          </mat-tab>
+
+           <!--PRIMR TAB DEL LISTADO DE TODOS Las claves PROFESORES-->
           <!-- ----------------------------------------------------------------------------------------------->
           <!-------------------------------------------------------------------------------------------------->
           <mat-tab label="Claves">
@@ -19,7 +146,7 @@
               <!-- AQUI VA EL LISTADO DE TODOS LOS PROFESORES DADOS DE ALTA-->
               <!--EMPIEZA TABLA E MOSTRADO DE TODOS LOS PROFESORES-->
               
-              <p>En el filtro puede buscar la clave, nombre  o plantel, según crea conveniente, para modificar dé click en la clave del profesor dentro de la tabla.
+              <p>En el filtro puede buscar la clave o nombre, si es que asignó nombre, según crea conveniente, para modificar dé click en la clave del profesor dentro de la tabla.
               </p>
               <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
@@ -82,74 +209,6 @@
   
             </div>
           </mat-tab>
-          <!-- TERMINA TAB DE TODOS LOS PROFSORES------------------------------------------------------->
-          <mat-tab label="Modificar" disabled>
-  
-            <div class="demo-tab-content">
-              <!--INICIA ALTA PREOFESORES-->
-              <!--*************************************************************************************-->
-              <div>
-                <div fxLayout="row wrap">
-                  <div fxFlex.gt-sm="100" fxFlex="100">
-                    <mat-card>
-                      <mat-card-content>
-                        <mat-card-title>Datos del Profesor</mat-card-title>
-                        <!-- ============================================================== -->
-                        <!-- column -->
-                        <!-- ============================================================== -->
-                        <form [formGroup]="form">
-  
-                            <div fxLayout="row wrap">
-                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
-                                <mat-form-field>
-                                  <input matInput placeholder="Clave de profesor" [formControl]="form.controls['claveProfesor']"     name="codigo" [(ngModel)]="claveProfesor.claveProfesor">
-                                </mat-form-field>
-                                <mat-hint *ngIf="form.controls['claveProfesor'].hasError('required') && form.controls['claveProfesor'].touched" class="text-danger font-14">Debe escribir la clave de profesor. </mat-hint>
-                             
-                              <!--  <mat-hint *ngIf="form.controls['fname'].hasError('minlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name must be at least 5 characters long.</mat-hint>
-                               <mat-hint *ngIf="form.controls['fname'].hasError('maxlength') && form.controls['fname'].touched" class="text-danger font-14">Your first name cannot exceed 10 characters.</mat-hint>
-                              -->
-                              </div>
-                    
-                           
-                              
-                    
-                             
-                      
-                      
-                              <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
-                                <mat-form-field>
-                                  <input matInput placeholder="Nombre" [formControl]="form.controls['nombre']"  name="nombre" [(ngModel)]="claveProfesor.nombre" >
-                                </mat-form-field>
-                                <small *ngIf="form.controls['nombre'].hasError('required') && form.controls['nombre'].touched" class="text-danger font-14">Debe proporcionar un nombre</small>
-                                <!--<small *ngIf="form.controls['url'].errors?.url && form.controls['url'].touched" class="text-danger font-14">You must include a valid web address.</small>-->
-                              </div>
-                            
-
-                      
-                             
-                            </div>
-                      
-                            <mat-card-actions>
-                              <button mat-raised-button color="primary" (click)="actualizarProfesor()"  type="submit" [disabled]="!form.valid">Actualizar</button>
-                            </mat-card-actions>
-                          </form>
-                      </mat-card-content>
-                    </mat-card>
-                  </div>
-                </div>
-  
-              </div>
-              <!--TERMINA ALTA PROFESORES-->
-              <!--***************************************************************************************-->
-  
-            </div>
-          </mat-tab>
-          <!--TERMINA TAB DE ALTA DE PROFESORE--------------------------------------------------------------->
-          <!----------------------------------------------------------------------------------------------->
-  
-  
-  
   
         </mat-tab-group>
       </mat-card>

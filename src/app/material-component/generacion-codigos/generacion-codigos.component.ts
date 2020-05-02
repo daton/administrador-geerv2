@@ -65,8 +65,11 @@ export class GeneracionCodigosComponent implements OnInit {
 
     { nombre: 'Orientación educativa', prefijo: 'OED' },
     { nombre: 'Orientación vocacional', prefijo: 'OVO' },
+    {nombre:'Artísticas 1', prefijo:'ART1'},
+    {nombre:'Artísticas 2', prefijo:'ART2'},
     { nombre: 'Administración de recursos humanos', prefijo: 'ARH' },
     { nombre: 'Actividades deportivas 1', prefijo: 'ADE1' },
+    {nombre:'Introducción al trabajo', prfijo:'TRA'},
     { nombre: 'Actividades deportivas 2', prefijo: 'ADE1' }
   ]
   constructor(private fb: FormBuilder, private http: HttpClient) {

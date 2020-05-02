@@ -1,1 +1,17 @@
-<p>cargar andamios</p>
+<mat-card>
+    <mat-card-content>
+        <mat-card-title>Default Editor</mat-card-title>
+        <mat-card-subtitle>quill editor with angular and TypeScript. ngx-quill is the new angular 2 and beyond implementation of ngQuill.
+        
+        </mat-card-subtitle>
+        <quill-editor  [style]="{height: '200px'}"   (onEditorCreated)=creado($event)  (onContentChanged)="cambiar($event)" theme="snow" ([ngModel])="editor"></quill-editor>
+   <br>
+   <p>Leido</p>
+   <button  (click)="oprimirBoton()">Boton</button>
+
+   <p>El buble</p>
+   <quill-editor    (onEditorCreated)="creado2($event)"     theme="bubble" placeholder="Bubble editor" bounds=".mat-drawer-content" [style]="{border: '1px solid #dadada'}"></quill-editor>
+
+    </mat-card-content>
+</mat-card>
+

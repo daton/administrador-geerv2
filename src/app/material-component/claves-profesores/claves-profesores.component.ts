@@ -68,8 +68,13 @@ export class ClavesProfesoresComponent implements OnInit {
       ]
 
     });
+this.obtenerClaves();
+   
 
-    //Iniciamos el request de las clasve profesores
+  }
+
+  obtenerClaves(){
+     //Iniciamos el request de las clasve profesores
     //ControladorClaveProfesor.java
     this.http.get<Claveprofesor[]>(Globales.urlBase + "/admin/claveprofesor").subscribe(
       claveprofesores => {
@@ -118,10 +123,9 @@ export class ClavesProfesoresComponent implements OnInit {
 
       }
     )
-
   }
 
-  actualizarProfesor() {
+  guardarClaveProfesor() {
 
 
 
@@ -143,7 +147,7 @@ export class ClavesProfesoresComponent implements OnInit {
   //this.profesor.materias=this.materias
 
     // Enviamos a http
-    this.http.put(Globales.urlBase + "/profesor", this.claveProfesor).subscribe(
+    this.http.post(Globales.urlBase + "/claveprofesor/guardar", this.claveProfesor).subscribe(
       estatus => {
         this.estatus = estatus
         console.log("Ya esta todo bien " + this.estatus.mensaje)
@@ -152,13 +156,13 @@ export class ClavesProfesoresComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: 'Actualización',
+          title: 'Estatus de creación',
           text: this.estatus.mensaje,
           confirmButtonText:'Aceptar',
           footer: 'GEER'
         })
-
-
+ 
+      this.obtenerClaves()
       }
     )
 
@@ -234,11 +238,22 @@ export class ClavesProfesoresComponent implements OnInit {
       confirmButtonText: 'Si, borrar definitivamente!'
     }).then((result) => {
       if (result.value) {
-        Swal.fire(
-          'Borrada!',
-          'La clave ha sifo borrada',
-          'success'
-        )
+   console.log("la clave a borrar es "+this.claveProfesor)
+
+this.http.delete<Estatus>(Globales.urlBase+"/claveprofesor/borrar/"+claveProfesor).subscribe(
+  estatus=>{
+    this.estatus=estatus;
+    Swal.fire(
+      'Borrada!',
+      'La clave ha sido borrada',
+      'success'
+    )
+    this.obtenerClaves()
+  }
+)
+
+
+        
       }
     })
 
@@ -255,6 +270,10 @@ export class ClavesProfesoresComponent implements OnInit {
     console.log("cambio" + clickedIndex);
     if (clickedIndex == 0) {
       //this.obtenerProfesores()
+    }
+    if(clickedIndex==2){
+      console.log("Haz oprimido guardar")
+      this.form.reset()
     }
 
   }

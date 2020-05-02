@@ -10,7 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MaterialRoutes } from './material.routing';
-
+import { QuillModule } from 'ngx-quill';
 
 
 import { InicioComponent } from './inicio/inicio.component';
@@ -36,6 +36,7 @@ import { VgBufferingModule } from 'videogular2/compiled/buffering';
     CommonModule,
     RouterModule.forChild(MaterialRoutes),
     DemoMaterialModule,
+    QuillModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
     FileUploadModule,
