@@ -28,7 +28,7 @@ import { Opcion } from '../../modelo/opcion';
 })
 export class GeneracionExamenesComponent implements OnInit {
 
-  materias: string[] = ['Informática 2', 'Informática 4']
+  materias: string[] = ['Informática 2', 'Informática 4','Lenguajes y comunicación 1','Lenguajes y comunicación 2', 'Literatura 1','Literatura 2']
   materia: string
   indiceTab = 0;
   agregado: boolean
@@ -85,6 +85,12 @@ export class GeneracionExamenesComponent implements OnInit {
 
 
   ngOnInit() {
+//Reiniciamos los reactrivos, para la vez que los examenes no tienen ningun reactivo
+this.examen={}
+this.preguntas=[]
+this.examen.preguntas=this.preguntas
+
+
     this.mostrarSeleccionarMateria = true
     this.mostrarPreguntas = false
     this.mostrarFormulario = false
@@ -102,7 +108,18 @@ this.mostrarSeleccionarMateria=false
     this.http.get<Examen>(Globales.urlBase + '/examen-profesor/' + this.id).subscribe(
       examen => {
         this.examen = examen;
-        this.preguntas = this.examen.preguntas
+        //Checamos si el examen ya existe, si no existe lo iniciamos para que no quede en null
+        //al igual que sus preguntas
+        if(this.examen.preguntas.length!=0){
+          this.preguntas = this.examen.preguntas
+          console.log("SI HAY PREGUNTAS "+this.preguntas.length)
+        }else{
+          this.examen={}
+          this.preguntas=[]
+          this.examen.preguntas=this.preguntas
+          console.log("No hay preguntas "+this.preguntas.length);
+        }
+        
 
 
 
@@ -192,6 +209,7 @@ this.mostrarSeleccionarMateria=false
         // this.obtenerPreguntas();
    } )
    //PARA GUARDAR UNO REACTIVO NUEVO
+   //Controlador 
   }else{
     console.log("PARA GAURDAR NUEVO")
     this.http.post<Estatus>(Globales.urlBase + "/examen-profesor/reactivo/" + this.id, this.preguntaActual).subscribe(

@@ -27,9 +27,13 @@
 	<div fxFlex.gt-sm="100%" fxFlex="100">
 		<mat-card>
 			<mat-card-content>
+				<mat-card-actions>
 				<button  mat-raised-button color="primary" (click)="irAMostrarMateria()" >Regresar </button>
+				<button  mat-raised-button color="primary" (click)="nuevoReactivo()" >Nuevo reactivo</button>
+				</mat-card-actions>
+			
 				<br><br>
-				<mat-card-title>Preguntas totales: {{preguntas.length}} del examen {{id}}</mat-card-title>
+				<mat-card-title>Preguntas: {{preguntas.length}} del examen {{id}}</mat-card-title>
 			</mat-card-content>
 			<p>Para modificar o editar una pregunta da click en el botón de número, para crear una nueva da click en el botón de Nuevo reactivo</p>
 			<mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab"
@@ -41,7 +45,7 @@
 					<div class="demo-tab-content text-center">
 						<!-- AQUI VA EL LISTADO DE TODOS LOS PROFESORES DADOS DE ALTA-->
 						<!--EMPIEZA TABLA E MOSTRADO DE TODOS LOS PROFESORES-->
-						<button  mat-raised-button color="primary" (click)="nuevoReactivo()" >Nuevo reactivo</button>
+					
 						
 						<p>Preguntas del examen seleccionado {{id}}
 						</p>
@@ -121,7 +125,7 @@
 									<mat-card>
 										<mat-card-content>
 											<mat-card-title></mat-card-title>
-								<p>Escribe  el titulo de la pregunta y las opciones, selecciona en el boton de radio de cada opcion la que corresponda a la opción correcta.</p>
+								<p>Primero escribe el texto de la pregunta y después las opciones, selecciona en el boton de radio de cada opcion la que corresponda a la opción correcta.</p>
 											<!-- ============================================================== -->
 											<!-- column -->
 											<!-- ============================================================== -->
@@ -146,7 +150,7 @@
 												<div fxLayout="row wrap">
 													<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
 														<mat-form-field>
-															<textarea matInput placeholder="Título"
+															<textarea matInput placeholder="Escribir el texto de la pregunta"
 															cdkTextareaAutosize
 															#autosize="cdkTextareaAutosize"
 															cdkAutosizeMinRows="2"
@@ -156,7 +160,7 @@
 														</mat-form-field>
 														<mat-hint
 															*ngIf="form.controls['titulo'].hasError('required') && form.controls['titulo'].touched"
-															class="text-danger font-14">Debe escribir el título de la
+															class="text-danger font-14">Debe escribir el texto de la
 															pregunta </mat-hint>
 
 									
@@ -243,7 +247,7 @@
 													<mat-card-actions>
 														<button mat-raised-button color="primary"
 															(click)="actualizarReactivo()" type="submit"
-															[disabled]="!form.valid">Actualizar</button>
+															[disabled]="!form.valid">Guardar</button>
 													</mat-card-actions>
 												</mat-radio-group>
 											</form>
