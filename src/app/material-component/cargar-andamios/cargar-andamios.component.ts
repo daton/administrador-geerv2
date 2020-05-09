@@ -19,6 +19,8 @@ export class CargarAndamiosComponent implements OnInit {
   contenido:any
   editor:any
   vista:Quill
+  focused=false
+  blured=false
   constructor() {
     this.subtitle = 'This is some text within a card block.';
   }
@@ -89,5 +91,20 @@ this.quill.setContents(null)
    localStorage.setItem("contenido",JSON.stringify(event.content) )
 
 
+  }
+
+
+  focus($event) {
+    // tslint:disable-next-line:no-console
+    console.log('focus', $event)
+    this.focused = true
+    this.blured = false
+  }
+
+  blur($event) {
+    // tslint:disable-next-line:no-console
+    console.log('blur', $event)
+    this.focused = false
+    this.blured = true
   }
 }

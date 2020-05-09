@@ -12,6 +12,7 @@ import { CargarVideosComponent } from './cargar-videos/cargar-videos.component';
 import { CargarAndamiosComponent } from './cargar-andamios/cargar-andamios.component';
 import { MensajeriaComponent } from './mensajeria/mensajeria.component';
 import { AlumnosTotalesComponent } from './alumnos-totales/alumnos-totales.component';
+import { GenexamLecturaComponent } from './genexam-lectura/genexam-lectura.component';
 
 export const MaterialRoutes: Routes = [
   {
@@ -123,10 +124,21 @@ export const MaterialRoutes: Routes = [
         path: 'generacion-examenes',
         component: GeneracionExamenesComponent,
         data: {
-          title: 'Generar examenes',
+          title: 'Examenes de opciones',
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
-            { title: 'Generar examenes' }
+            { title: 'Examenes de opciones' }
+          ]
+        }
+      },
+      {
+        path: 'genexam-lectura',
+        component: GenexamLecturaComponent,
+        data: {
+          title: 'Examenes de  lecturas',
+          urls: [
+            { title: 'Dashboard', url: '/dashboard' },
+            { title: 'Examenes de lecturas' }
           ]
         }
       },

@@ -82,7 +82,7 @@ this.obtenerClaves();
         //LLenamos el excelclave profesor pero mantes nlimpiamos todo el excel
         this.excelClaveProfesores = []
 
-
+let totales=0;
 
         this.claveprofesores.forEach(claveprofesor => {
           let registrado = 'No'
@@ -91,9 +91,10 @@ this.obtenerClaves();
             console.log("Carelia "+JSON.stringify(claveprofesor));
           }
           
-          if (claveprofesor.profesor != null) {
+          if (claveprofesor.registardo==true) {
             registrado = "Sí"
-            fecha = claveprofesor.profesor.fecha
+          totales++;
+            fecha = claveprofesor.fecha
           }
           //Anexamos al excel
           this.excelClaveProfesores.push(
@@ -109,7 +110,7 @@ this.obtenerClaves();
         })
 
 
-
+console.log("totales registradas "+totales)
 
         this.dataSource = new MatTableDataSource(this.excelClaveProfesores);
 

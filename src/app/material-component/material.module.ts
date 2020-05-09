@@ -31,6 +31,7 @@ import { VgCoreModule } from 'videogular2/compiled/core';
 import { VgControlsModule } from 'videogular2/compiled/controls';
 import { VgOverlayPlayModule } from 'videogular2/compiled/overlay-play';
 import { VgBufferingModule } from 'videogular2/compiled/buffering';
+import { GenexamLecturaComponent } from './genexam-lectura/genexam-lectura.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -61,7 +62,8 @@ import { VgBufferingModule } from 'videogular2/compiled/buffering';
     CargarVideosComponent,
     CargarAndamiosComponent,
     MensajeriaComponent,
-    AlumnosTotalesComponent
+    AlumnosTotalesComponent,
+    GenexamLecturaComponent
   ]
 })
 export class MaterialComponentsModule {}

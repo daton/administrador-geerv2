@@ -1,0 +1,147 @@
+<mat-card>
+    <mat-card-content>
+        <mat-card-title class="mb-3">Examenes con lectura</mat-card-title>
+        <h3>Nota: Esta página aun esta en construcción es solo un prototipo no terminado</h3>
+        <mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab" (selectedTabChange)="onTabChanged($event);">
+            <!------------------------------------------------------------------------------------------------------->
+            <!--Inicia tab de Nueva Lectura----------------------------------------------------------------------------->
+            <mat-tab label="Nueva lectura">
+                <div class="demo-tab-content">
+                    <div fxLayout="row wrap">
+                        <p>Introduzca los datos generales de la materia, posteriormente la lectura y al final las
+                            preguntas.
+                            Puede agregar varias preguntas y para guardar oprima el botón finalizar. Posteriormente,
+                            después de finalizar puede gregar mas
+                            preguntas si así lo desea.
+                        </p>
+                        <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                            <mat-form-field>
+                                <mat-select placeholder="Selecciona una materia" [(ngModel)]="materia">
+                                    <mat-option *ngFor="let materia of materias" [value]="materia">
+                                        {{materia}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <!--Bloque-->
+                        <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                            <mat-form-field>
+                                <mat-select placeholder="Selecciona un bloque" [(ngModel)]="bloque">
+                                    <mat-option *ngFor="let bloquesin of bloqueExamen" [value]="bloquesin">
+                                        {{bloquesin.nombreLargo}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                            <mat-form-field>
+                                <input matInput placeholder="Introduce el título de la lectura" name="numero" [(ngModel)]="tituloLectura">
+                            </mat-form-field>
+                        </div>
+                        <p>A continuacion introduzca la lectura, puede copiar y pegar texto desde microsoft word,
+                            las imágenes se insertan desde un archivo en formato png o jpg.
+                        </p>
+                        <quill-editor [styles]="{height: '450px'}" (onFocus)="focus($event)" (onBlur)="blur($event)"
+                            (onEditorCreated)=creado($event) (onContentChanged)="cambiar($event)" theme="snow"
+                            ([ngModel])="editor">
+                        </quill-editor>
+
+                        <!---INICIA LA SECCION DE PREGUNTAS----------------------------------------------------------------------->
+                        <!--Inicia la session de preguntas------------------------------------------------------------------------->
+                        <form class="basic-form" [formGroup]="form">
+                            <div fxLayout="row wrap">
+
+
+
+
+
+                                <div fxFlex.gt-md="100" fxFlex="100">
+                                    <!--El puto titulo-->
+                                    <mat-form-field>
+                                        <textarea matInput placeholder="Escribir el texto de la pregunta"
+                                            cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="4"
+                                            cdkAutosizeMaxRows="12" [formControl]="form.controls['titulo']"
+                                            name="titulo" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100"></textarea>
+                                    </mat-form-field>
+                                    <mat-hint
+                                        *ngIf="form.controls['titulo'].hasError('required') && form.controls['titulo'].touched"
+                                        class="text-danger font-14">Debe escribir el texto de la
+                                        pregunta </mat-hint>
+                                </div>
+                                <!--Termina el puto titulo-->
+
+                                <mat-radio-group name="selectedValue" [formControl]="form.controls['selectedValue']"
+                                    [(ngModel)]="indiceSeleccionado">
+                                 
+                                    <mat-radio-button [value]="radios[0].indice">Es correcta</mat-radio-button>
+                               
+                                        <mat-form-field>
+                                            <textarea matInput placeholder="Opción 1"
+                                                [formControl]="form.controls['opcion1']" name="opcion1"></textarea>
+                                        </mat-form-field>
+                                  
+                                    <mat-hint
+                                        *ngIf="form.controls['opcion1'].hasError('required') && form.controls['opcion1'].touched"
+                                        class="text-danger font-14">Debe escribir la opción
+                                    </mat-hint>
+                                
+
+                                    <mat-radio-button [value]="radios[1].indice">Es
+                                        correcta</mat-radio-button>
+                                    <mat-form-field>
+                                        <textarea matInput placeholder="Opción 2"
+                                            [formControl]="form.controls['opcion2']" name="opcion1"></textarea>
+                                    </mat-form-field>
+                                    <mat-hint
+                                        *ngIf="form.controls['opcion2'].hasError('required') && form.controls['opcion2'].touched"
+                                        class="text-danger font-14">Debe escribir la opción
+                                    </mat-hint>
+
+                                    <mat-radio-button [value]="radios[2].indice">Escorrecta</mat-radio-button>
+                                    <mat-form-field>
+                                        <textarea matInput placeholder="Opción 3"
+                                            [formControl]="form.controls['opcion3']" name="opcion3"></textarea>
+                                    </mat-form-field>
+
+                                    <mat-hint
+                                        *ngIf="form.controls['opcion3'].hasError('required') && form.controls['opcion3'].touched"
+                                        class="text-danger font-14">Debe escribir la opción
+                                    </mat-hint>
+
+                                    <mat-radio-button [value]="radios[3].indice">Es correcta</mat-radio-button>
+                                    <mat-form-field>
+                                        <textarea matInput placeholder="Opción 4"
+                                            [formControl]="form.controls['opcion4']" name="opcion4"></textarea>
+                                    </mat-form-field>
+                                    <mat-hint
+                                        *ngIf="form.controls['opcion4'].hasError('required') && form.controls['opcion4'].touched"
+                                        class="text-danger font-14">Debe escribir la opción
+                                    </mat-hint>
+
+
+                                </mat-radio-group>
+
+
+                                <br>
+                                El indice:{{indiceSeleccionado}}
+                                <br>
+                                <mat-card-actions>
+                                    <button mat-raised-button color="primary" (click)="guardarPregunta()"
+                                        type="submit" [disabled]="!form.valid">Agregar y crear otra pregunta</button>
+
+                                    <button mat-raised-button color="primary" (click)="finalizar" [disabled]="!puedeGuardar" (click)="guardarExamenLectura()">Finalizar
+                                        y guardar</button>
+                                </mat-card-actions>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <!--tERMINA LA PREGUNTA-->
+
+
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card-content>
+</mat-card>

@@ -1,21 +1,29 @@
-<mat-card  *ngIf="mostrarSeleccionarMateria">
+<mat-card *ngIf="mostrarSeleccionarMateria">
 	<mat-card-content>
-		<mat-card-title class="mb-3">Selecciona una materia</mat-card-title>
-		<mat-form-field>
-			<mat-select placeholder="Selecciona una materia" [(ngModel)]="materia">
-				<mat-option *ngFor="let materia of materias" [value]="materia">
-					{{materia}}
-				</mat-option>
-			</mat-select>
-		</mat-form-field>
-		<!--Bloque-->
-		<mat-form-field>
-			<mat-select placeholder="Selecciona un bloque" [(ngModel)]="bloque">
-				<mat-option *ngFor="let bloquesin of bloqueExamen" [value]="bloquesin">
-					{{bloquesin.nombreLargo}}
-				</mat-option>
-			</mat-select>
-		</mat-form-field>
+		<mat-card-title class="mb-3">Selecciona primero una materia</mat-card-title>
+		<div fxLayout="row wrap">
+
+			<div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+				<mat-form-field>
+					<mat-select placeholder="Selecciona una materia" [(ngModel)]="materia">
+						<mat-option *ngFor="let materia of materias" [value]="materia">
+							{{materia}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			<!--Bloque-->
+			<div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+				<mat-form-field>
+					<mat-select placeholder="Selecciona un bloque" [(ngModel)]="bloque">
+						<mat-option *ngFor="let bloquesin of bloqueExamen" [value]="bloquesin">
+							{{bloquesin.nombreLargo}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+
+		</div>
 		<!--Boton-->
 		<button mat-raised-button color="primary" (click)="cargarReactivos(materia, bloque)">Cargar Reactivos</button>
 	</mat-card-content>
@@ -28,14 +36,15 @@
 		<mat-card>
 			<mat-card-content>
 				<mat-card-actions>
-				<button  mat-raised-button color="primary" (click)="irAMostrarMateria()" >Regresar </button>
-				<button  mat-raised-button color="primary" (click)="nuevoReactivo()" >Nuevo reactivo</button>
+					<button mat-raised-button color="primary" (click)="irAMostrarMateria()">Regresar </button>
+					<button mat-raised-button color="primary" (click)="nuevoReactivo()">Nuevo reactivo</button>
 				</mat-card-actions>
-			
+
 				<br><br>
 				<mat-card-title>Preguntas: {{preguntas.length}} del examen {{id}}</mat-card-title>
 			</mat-card-content>
-			<p>Para modificar o editar una pregunta da click en el botón de número, para crear una nueva da click en el botón de Nuevo reactivo</p>
+			<p>Para modificar o editar una pregunta da click en el botón de número, para crear una nueva da click en el
+				botón de Nuevo reactivo</p>
 			<mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab"
 				(selectedTabChange)="onTabChanged($event);">
 				<!--PRIMR TAB DEL LISTADO DE TODOS LOS PROFESORES-->
@@ -45,8 +54,8 @@
 					<div class="demo-tab-content text-center">
 						<!-- AQUI VA EL LISTADO DE TODOS LOS PROFESORES DADOS DE ALTA-->
 						<!--EMPIEZA TABLA E MOSTRADO DE TODOS LOS PROFESORES-->
-					
-						
+
+
 						<p>Preguntas del examen seleccionado {{id}}
 						</p>
 						<mat-form-field>
@@ -84,10 +93,14 @@
 										<div class="arreglar">
 											<br>
 											{{pregunta.titulo}}
-											<br><span [ngClass]="pregunta.opciones[0].acierto ? 'buena':'mala'" >a) {{pregunta.opciones[0].titulo}}</span>
-											<br><span [ngClass]="pregunta.opciones[1].acierto ? 'buena':'mala'">b) {{pregunta.opciones[1].titulo}}</span>
-											<br><span [ngClass]="pregunta.opciones[2].acierto ? 'buena':'mala'">c) {{pregunta.opciones[2].titulo}}</span>
-											<br><span [ngClass]="pregunta.opciones[3].acierto ? 'buena':'mala'">d) {{pregunta.opciones[3].titulo}}</span>
+											<br><span [ngClass]="pregunta.opciones[0].acierto ? 'buena':'mala'">a)
+												{{pregunta.opciones[0].titulo}}</span>
+											<br><span [ngClass]="pregunta.opciones[1].acierto ? 'buena':'mala'">b)
+												{{pregunta.opciones[1].titulo}}</span>
+											<br><span [ngClass]="pregunta.opciones[2].acierto ? 'buena':'mala'">c)
+												{{pregunta.opciones[2].titulo}}</span>
+											<br><span [ngClass]="pregunta.opciones[3].acierto ? 'buena':'mala'">d)
+												{{pregunta.opciones[3].titulo}}</span>
 										</div>
 									</mat-cell>
 								</ng-container>
@@ -117,7 +130,7 @@
 				<mat-tab label="Modificar" disabled>
 
 					<div class="demo-tab-content" *ngIf="mostrarFormulario">
-						<!--INICIA ALTA PREOFESORES-->
+						<!--INICIA ALTA PREGUNTA-->
 						<!--*************************************************************************************-->
 						<div>
 							<div fxLayout="row wrap">
@@ -125,52 +138,62 @@
 									<mat-card>
 										<mat-card-content>
 											<mat-card-title></mat-card-title>
-								<p>Primero escribe el texto de la pregunta y después las opciones, selecciona en el boton de radio de cada opcion la que corresponda a la opción correcta.</p>
+											<p>Primero escribe el texto de la pregunta y después las opciones,
+												selecciona en el boton de radio de cada opcion la que corresponda a la
+												opción correcta.</p>
 											<!-- ============================================================== -->
 											<!-- column -->
 											<!-- ============================================================== -->
 											<form [formGroup]="form">
-												<mat-radio-group name="selectedValue"   [formControl]="form.controls['selectedValue']"  [(ngModel)]="selectedValue" >
-												<div fxLayout="row wrap">
-													<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
-														<mat-form-field>
-															<input matInput placeholder="Número"
-																[formControl]="form.controls['numero']" name="numero"
-																[(ngModel)]="preguntaActual.numero" readonly>
-														</mat-form-field>
-														<mat-hint
-															*ngIf="form.controls['numero'].hasError('required') && form.controls['numero'].touched"
-															class="text-danger font-14">
-														 </mat-hint>
+												<mat-radio-group name="selectedValue"
+													[formControl]="form.controls['selectedValue']"
+													[(ngModel)]="selectedValue">
+													<div fxLayout="row wrap">
+														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
+															fxFlex="100">
+															<mat-form-field>
+																<input matInput placeholder="Número"
+																	[formControl]="form.controls['numero']"
+																	name="numero" [(ngModel)]="preguntaActual.numero"
+																	readonly>
+															</mat-form-field>
+															<mat-hint
+																*ngIf="form.controls['numero'].hasError('required') && form.controls['numero'].touched"
+																class="text-danger font-14">
+															</mat-hint>
 
-									
+
+														</div>
 													</div>
-												</div>
-
-												<div fxLayout="row wrap">
-													<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
-														<mat-form-field>
-															<textarea matInput placeholder="Escribir el texto de la pregunta"
-															cdkTextareaAutosize
-															#autosize="cdkTextareaAutosize"
-															cdkAutosizeMinRows="2"
-            												cdkAutosizeMaxRows="12"
-																[formControl]="form.controls['titulo']" name="titulo"
-																[(ngModel)]="preguntaActual.titulo"></textarea>
-														</mat-form-field>
-														<mat-hint
-															*ngIf="form.controls['titulo'].hasError('required') && form.controls['titulo'].touched"
-															class="text-danger font-14">Debe escribir el texto de la
-															pregunta </mat-hint>
-
-									
-													</div>
-												</div>
 
 													<div fxLayout="row wrap">
 														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
 															fxFlex="100">
-															<mat-radio-button [(value)]="preguntaActual.opciones[0].titulo"  [(checked)]="preguntaActual.opciones[0].acierto" >Es correcta</mat-radio-button>
+															<mat-form-field>
+																<textarea matInput
+																	placeholder="Escribir el texto de la pregunta"
+																	cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+																	cdkAutosizeMinRows="2" cdkAutosizeMaxRows="12"
+																	[formControl]="form.controls['titulo']"
+																	name="titulo"
+																	[(ngModel)]="preguntaActual.titulo"></textarea>
+															</mat-form-field>
+															<mat-hint
+																*ngIf="form.controls['titulo'].hasError('required') && form.controls['titulo'].touched"
+																class="text-danger font-14">Debe escribir el texto de la
+																pregunta </mat-hint>
+
+
+														</div>
+													</div>
+
+													<div fxLayout="row wrap">
+														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
+															fxFlex="100">
+															<mat-radio-button
+																[(value)]="preguntaActual.opciones[0].titulo"
+																[(checked)]="preguntaActual.opciones[0].acierto">Es
+																correcta</mat-radio-button>
 															<mat-form-field>
 																<textarea matInput placeholder="Opción 1"
 																	[formControl]="form.controls['opcion1']"
@@ -189,7 +212,10 @@
 													<div fxLayout="row wrap">
 														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
 															fxFlex="100">
-															<mat-radio-button [(value)]="preguntaActual.opciones[1].titulo" [(checked)]="preguntaActual.opciones[1].acierto">Es correcta</mat-radio-button>
+															<mat-radio-button
+																[(value)]="preguntaActual.opciones[1].titulo"
+																[(checked)]="preguntaActual.opciones[1].acierto">Es
+																correcta</mat-radio-button>
 															<mat-form-field>
 																<textarea matInput placeholder="Opción 2"
 																	[formControl]="form.controls['opcion2']"
@@ -208,7 +234,10 @@
 													<div fxLayout="row wrap">
 														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
 															fxFlex="100">
-															<mat-radio-button [(value)]="preguntaActual.opciones[2].titulo" [(checked)]="preguntaActual.opciones[2].acierto">Es correcta</mat-radio-button>
+															<mat-radio-button
+																[(value)]="preguntaActual.opciones[2].titulo"
+																[(checked)]="preguntaActual.opciones[2].acierto">Es
+																correcta</mat-radio-button>
 															<mat-form-field>
 																<textarea matInput placeholder="Opción 3"
 																	[formControl]="form.controls['opcion3']"
@@ -227,7 +256,10 @@
 													<div fxLayout="row wrap">
 														<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100"
 															fxFlex="100">
-															<mat-radio-button [(value)]="preguntaActual.opciones[3].titulo" [(checked)]="preguntaActual.opciones[3].acierto">Es correcta</mat-radio-button>
+															<mat-radio-button
+																[(value)]="preguntaActual.opciones[3].titulo"
+																[(checked)]="preguntaActual.opciones[3].acierto">Es
+																correcta</mat-radio-button>
 															<mat-form-field>
 																<textarea matInput placeholder="Opción 4"
 																	[formControl]="form.controls['opcion4']"

@@ -28,7 +28,9 @@ import { Opcion } from '../../modelo/opcion';
 })
 export class GeneracionExamenesComponent implements OnInit {
 
-  materias: string[] = ['Informática 2', 'Informática 4','Lenguajes y comunicación 1','Lenguajes y comunicación 2', 'Literatura 1','Literatura 2']
+  mitipo:any={}
+
+  materias: string[] = ['Materia demo','Informática 2', 'Informática 4','Lenguajes y comunicación 1','Lenguajes y comunicación 2', 'Literatura 1','Literatura 2','Taller de análisis de textos 1', 'Taller de análisis de textos 2']
   materia: string
   indiceTab = 0;
   agregado: boolean
@@ -49,7 +51,7 @@ export class GeneracionExamenesComponent implements OnInit {
   hide = true;
   id: string
 
-  bloqueExamen: any[] = [{ nombre: 'b1', nombreLargo: 'Bloque 1' }, { nombre: 'b2', nombreLargo: 'Bloque 2' }, { nombre: 'b3', nombreLargo: 'Bloque 3' }]
+  bloqueExamen: any[] = [{nombre: 'diagnostico', nombreLargo: 'Diagnóstico' },{ nombre: 'b1', nombreLargo: 'Bloque 1' }, { nombre: 'b2', nombreLargo: 'Bloque 2' }, { nombre: 'b3', nombreLargo: 'Bloque 3' }]
   bloque: string
   examen: Examen = {}
   mostrarFormulario: boolean
