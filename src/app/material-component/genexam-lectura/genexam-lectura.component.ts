@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { } from 'ngx-quill';
 import Quill from 'quill'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -9,6 +9,9 @@ import { Estatus } from '../../modelo/estatus';
 import { Globales } from '../../modelo/globales';
 import { ExamenLectura } from '../../modelo/examenlectura';
 import { Conjunto } from '../../modelo/conjunto';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-genexam-lectura',
@@ -20,6 +23,14 @@ export class GenexamLecturaComponent implements OnInit {
   favoriteSeason: string;
   radios: any[] = [{ indice: 0, texto: 'Uno' }, { indice: 1, texto: 'Uno' }, { indice: 2, texto: 'Uno' }, { indice: 3, texto: 'Uno' }];
   indiceSeleccionado: number
+
+
+
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  //dataSource = new MatTableDataSource(this.excelPracticas)
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  dataSource: MatTableDataSource<Conjunto>
+
 
   quill: Quill
   quillBuble: Quill
@@ -36,7 +47,7 @@ export class GenexamLecturaComponent implements OnInit {
   materias: string[] = ['Materia demo', 'Informática 2', 'Informática 4', 'Lenguajes y comunicación 1', 'Lenguajes y comunicación 2', 'Literatura 1', 'Literatura 2', 'Taller de análisis de textos 1', 'Taller de análisis de textos 2']
   materia: string
 
-
+  idValido = false;
   bloqueExamen: any[] = [{ nombre: 'diagnostico', nombreLargo: 'Diagnóstico' }, { nombre: 'b1', nombreLargo: 'Bloque 1' }, { nombre: 'b2', nombreLargo: 'Bloque 2' }, { nombre: 'b3', nombreLargo: 'Bloque 3' }]
   bloque: any
 
@@ -52,13 +63,25 @@ export class GenexamLecturaComponent implements OnInit {
   conjunto: Conjunto
   preguntaActual: Pregunta = {};
   opcionesActuales: Opcion[] = []
-  preguntas:Pregunta[]=[]
-  conjuntos:Conjunto[]=[]
+  preguntas: Pregunta[] = []
+  conjuntos: Conjunto[] = []
+  idExamen: string
 
 
+  displayedColumns: string[] = ['numero', 'titulo'];
+  constructor(private fb: FormBuilder, private http: HttpClient, private breakpointObserver: BreakpointObserver) {
 
-  constructor(private fb: FormBuilder, private http: HttpClient) { }
+    //El siguiente breakpoint es para hacer responsiva cada fila
+    breakpointObserver.observe(['(max-width: 600px)']).subscribe(result => {
+      this.displayedColumns = result.matches ?
+        ['numero', 'titulo'] :
+        ['numero', 'titulo'];
+    });
+
+  }
   ngOnInit() {
+
+
     this.preguntaActual.opciones = this.opcionesActuales
 
     this.iniciarFormulario()
@@ -69,15 +92,61 @@ export class GenexamLecturaComponent implements OnInit {
 
     this.contenido = JSON.parse(jsonString);
     console.log("Contenido" + jsonString)
+    /*
+        setTimeout(() => {
+          let jsonString = localStorage.getItem("contenido");
+          this.quill.content = JSON.parse(jsonString);
+          this.content = JSON.parse(jsonString);
+          console.log(JSON.stringify(this.quill.content))
+    
+        }, 1200)
+    */
 
-    setTimeout(() => {
-      let jsonString = localStorage.getItem("contenido");
-      this.quill.content = JSON.parse(jsonString);
-      this.content = JSON.parse(jsonString);
-      console.log(JSON.stringify(this.quill.content))
+  }
 
-    }, 1200)
 
+  cargarReactivos(materia: string, bloque: any) {
+
+    this.materia = materia
+    this.bloque.nombre = bloque.nombre
+
+    console.log("Son " + materia + "-" + bloque.nombre)
+    this.idExamen = materia + "-" + bloque.nombre
+    this.http.get<ExamenLectura>(Globales.urlBase + '/examen-lectura/' + this.idExamen).subscribe(
+      examen => {
+        this.examenLectura = examen;
+        //Checamos si el examen ya existe, si no existe lo iniciamos para que no quede en null
+        //al igual que sus preguntas
+        if (this.examenLectura.conjuntos != null) {
+          this.conjuntos = this.examenLectura.conjuntos
+          console.log("SI conjuntos" + this.conjuntos.length)
+          this.idValido = true
+        } else {
+
+          this.conjuntos = []
+          console.log("No hay conjuntos " + this.conjuntos.length);
+          this.idValido = true
+        }
+
+
+
+
+
+        //let indice = 1
+
+
+        this.dataSource = new MatTableDataSource(this.conjuntos);
+
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }, 1200)
+
+
+        //Mostramos la tabla
+
+      }
+    )
 
   }
   creado(event: Quill) {
@@ -106,8 +175,8 @@ export class GenexamLecturaComponent implements OnInit {
     this.quillBuble = event
 
     console.log("Invocando el quill-view")
-   // let jsonString = localStorage.getItem("contenido");
-   // event.content = JSON.parse(jsonString);
+    // let jsonString = localStorage.getItem("contenido");
+    // event.content = JSON.parse(jsonString);
     //this.content = JSON.parse(jsonString);
 
     event.setContents(this.content)
@@ -127,7 +196,7 @@ export class GenexamLecturaComponent implements OnInit {
     console.log(" AGUARDARRRRRR11" + JSON.stringify(event.content))
     this.miContenido = JSON.stringify(event.content)
 
-   // localStorage.setItem("contenido", JSON.stringify(event.content))
+    // localStorage.setItem("contenido", JSON.stringify(event.content))
 
 
   }
@@ -202,8 +271,8 @@ export class GenexamLecturaComponent implements OnInit {
 
   }
   guardarPregunta() {
-    
-   
+
+
 
     // console.log(contenido)
     let tituloPregunta = this.form.get('titulo').value
@@ -219,78 +288,107 @@ export class GenexamLecturaComponent implements OnInit {
     console.log(this.indiceSeleccionado);
 
     //creamos opciones de la pregunta
-    this.opcionesActuales=[
-      {titulo:op1, acierto:false},
-      {titulo:op2, acierto:false},
-      {titulo:op3, acierto:false},
-      {titulo:op4, acierto:false}
+    this.opcionesActuales = [
+      { titulo: op1, acierto: false },
+      { titulo: op2, acierto: false },
+      { titulo: op3, acierto: false },
+      { titulo: op4, acierto: false }
     ]
 
     //Ajustamos el valor de la opción valida
-    this.opcionesActuales[this.indiceSeleccionado].acierto=true
+    this.opcionesActuales[this.indiceSeleccionado].acierto = true
 
     //creamos la pregunta
-  this.preguntaActual={
-  titulo:tituloPregunta,
-  opciones:this.opcionesActuales
-  }
+    this.preguntaActual = {
+      titulo: tituloPregunta,
+      opciones: this.opcionesActuales
+    }
 
-  //Agregamos a las preguntas
-  this.preguntas.push(this.preguntaActual)
+    //Agregamos a las preguntas
+    this.preguntas.push(this.preguntaActual)
 
 
-   
+
 
     //Activamos el boton de guardarExamen
-    this.puedeGuardar=true
+    this.puedeGuardar = true
+
+    // Limpiamos el formulario
+    this.form.reset();
 
   }
   guardarExamenLectura() {
 
- //preparamos el conjunto
-this.conjunto={}
- console.log("El puto conteniudo "+this.miContenido)
- let elcontenido=this.miContenido
-
- this.conjunto={
-  titulo:this.tituloLectura,
-  textoGeneral:elcontenido,
-   preguntas:this.preguntas
-  
-}
-//agregamos a los Conjuntos pero antes lo vaciamos
-this.conjuntos=[]
-this.conjuntos.push(this.conjunto)
 
 
- // Finalmente Preparamos el examen
-let materia=this.materia
-//console.log(materia)
-let bloque=this.bloque.nombre
-//console.log(bloque)
 
-//console.log(titulo)
 
-this.examenLectura={}
- this.examenLectura={
-   id:materia+"-"+bloque,
-   nombre:materia,
-   conjuntos:this.conjuntos
 
- }
+    Swal.fire({
+      title: 'Guardar lectura?',
+      text: "Deseas guardar la lectura con esas preguntas?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, Guardar!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
 
-    this.http.post<Estatus>(Globales.urlBase + "/examen-lectura", this.examenLectura).subscribe(
-      estatus => {
-        console.log("SE ha enbviado con exito")
-        this.estatus = estatus;
-  
+      if (result.value) {
 
-//Ni modo borramos las preguntas y los conjuntos
-this.preguntas=[]
-this.conjuntos=[]
+        //preparamos el conjunto
+        this.conjunto = {}
+        console.log("El puto conteniudo " + this.miContenido)
+        let elcontenido = this.miContenido
 
-      }
-    )
-    //
+        this.conjunto = {
+          titulo: this.tituloLectura,
+          textoGeneral: elcontenido,
+          preguntas: this.preguntas
+
+        }
+        //agregamos a los Conjuntos pero antes lo vaciamos
+        this.conjuntos = []
+        this.conjuntos.push(this.conjunto)
+
+
+        // Finalmente Preparamos el examen
+        let materia = this.materia
+        //console.log(materia)
+        let bloque = this.bloque.nombre
+        //console.log(bloque)
+
+        //console.log(titulo)
+
+        this.examenLectura = {}
+        this.examenLectura = {
+          id: materia + "-" + bloque,
+          nombre: materia,
+          conjuntos: this.conjuntos
+
+        }
+
+        this.http.post<Estatus>(Globales.urlBase + "/examen-lectura", this.examenLectura).subscribe(
+          
+          estatus => {
+            console.log("SE ha enbviado con exito")
+            this.estatus = estatus;
+
+
+
+
+            //Ni modo borramos las preguntas y los conjuntos
+            this.preguntas = []
+            this.conjuntos = []
+            //Desabilitamos los tabs
+            this.idValido = false
+
+
+
+          })
+        }
+      })
+    }
   }
-}
+    

@@ -2,18 +2,17 @@
     <mat-card-content>
         <mat-card-title class="mb-3">Examenes con lectura</mat-card-title>
         <h3>Nota: Esta página aun esta en construcción es solo un prototipo no terminado</h3>
-        <mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab" (selectedTabChange)="onTabChanged($event);">
-            <!------------------------------------------------------------------------------------------------------->
-            <!--Inicia tab de Nueva Lectura----------------------------------------------------------------------------->
-            <mat-tab label="Nueva lectura">
-                <div class="demo-tab-content">
-                    <div fxLayout="row wrap">
-                        <p>Introduzca los datos generales de la materia, posteriormente la lectura y al final las
+
+<!--------------------------------------------------------------------------------------------->        
+<!-- aQUI DEBE DE INICIAR SELECCION DE MATERIA Y BLOQUE SI EXISTE UNA MATERIA O NO-->
+
+<p>Introduzca los datos generales de la materia, posteriormente la lectura y al final las
                             preguntas.
                             Puede agregar varias preguntas y para guardar oprima el botón finalizar. Posteriormente,
-                            después de finalizar puede gregar mas
-                            preguntas si así lo desea.
-                        </p>
+                            después de finalizar puede agregar mas
+                            preguntas si así lo desea. </p>
+
+                <div fxLayout="row wrap">
                         <div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
                             <mat-form-field>
                                 <mat-select placeholder="Selecciona una materia" [(ngModel)]="materia">
@@ -33,11 +32,69 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
+                        <button mat-raised-button color="primary" (click)="cargarReactivos(materia, bloque)">Cargar Lecturas</button>
+
+                 </div>
+                       
+<!--tERMINA SELECION DE MATERIA Y BLOQUE-->
+        <mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab" (selectedTabChange)="onTabChanged($event);"  *ngIf="idValido">
+
+            <!--INICIA TAB DE MOSTRAR CONJUNTOS-->
+            <!------------------------------------------------------------------------------------------------------->
+            <mat-tab label="Lecturas">
+                <div class="demo-tab-content text-center">
+                 
+                  
+                    <mat-form-field>
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+                    </mat-form-field>
+                    <div class="responsive-table">
+                        <mat-table #table [dataSource]="dataSource" matSort>
+
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="numero">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Modificar</mat-header-cell>
+                                <mat-cell *matCellDef="let conjunto">
+
+                                    <button mat-button class="fondo" (click)="modificar(pregunta.numero)">
+                                        <mat-icon>create</mat-icon>
+                                        {{conjunto.preguntas.length}}
+                                    </button>
+
+
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="titulo">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Título. </mat-header-cell>
+                                <mat-cell *matCellDef="let conjunto">
+                                        {{conjunto.titulo}}           
+                                </mat-cell>
+                            </ng-container>
+
+    
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </mat-table>
+                        <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+                    </div>
+
+                </div>
+            </mat-tab>
+            <!------------------------------------------------------------------------------------------------------->
+            <!--Inicia tab de Nueva Lectura----------------------------------------------------------------------------->
+            <mat-tab label="Nueva lectura"  >
+                <div class="demo-tab-content">
+                    <div fxLayout="row wrap">
+
                         <div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
                             <mat-form-field>
                                 <input matInput placeholder="Introduce el título de la lectura" name="numero" [(ngModel)]="tituloLectura">
                             </mat-form-field>
                         </div>
+                        
                         <p>A continuacion introduzca la lectura, puede copiar y pegar texto desde microsoft word,
                             las imágenes se insertan desde un archivo en formato png o jpg.
                         </p>
@@ -123,14 +180,14 @@
 
 
                                 <br>
-                                El indice:{{indiceSeleccionado}}
+                            <!--{indiceSeleccionado}}-->
                                 <br>
                                 <mat-card-actions>
                                     <button mat-raised-button color="primary" (click)="guardarPregunta()"
-                                        type="submit" [disabled]="!form.valid">Agregar y crear otra pregunta</button>
+                                        type="submit" [disabled]="!form.valid">Agregar y crear otra Pregunta</button>
 
                                     <button mat-raised-button color="primary" (click)="finalizar" [disabled]="!puedeGuardar" (click)="guardarExamenLectura()">Finalizar
-                                        y guardar</button>
+                                        y Guardar</button>
                                 </mat-card-actions>
 
                             </div>
