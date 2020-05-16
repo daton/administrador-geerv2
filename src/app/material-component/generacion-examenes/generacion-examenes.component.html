@@ -2,7 +2,9 @@
 	<mat-card-content>
 		<mat-card-title class="mb-3">Selecciona primero una materia</mat-card-title>
 		<div fxLayout="row wrap">
-
+   
+			<!-- formita para  seleccion de la materia -->
+			<form [formGroup]="formita">
 			<div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
 				<mat-form-field>
 					<mat-select placeholder="Selecciona una materia" [(ngModel)]="materia">
@@ -23,9 +25,11 @@
 				</mat-form-field>
 			</div>
 
-		</div>
+		
 		<!--Boton-->
-		<button mat-raised-button color="primary" (click)="cargarReactivos(materia, bloque)">Cargar Reactivos</button>
+		<button mat-raised-button color="primary" (click)="cargarReactivos(materia, bloque)"  [disabled]="materia===null&&bloque===null">Cargar Reactivos</button>
+	</form>
+	</div>
 	</mat-card-content>
 </mat-card>
 <!-- Mostramos el examen respectivo-->

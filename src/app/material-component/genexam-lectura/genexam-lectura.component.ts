@@ -10,7 +10,7 @@ import { Globales } from '../../modelo/globales';
 import { ExamenLectura } from '../../modelo/examenlectura';
 import { Conjunto } from '../../modelo/conjunto';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatSort, MatPaginator, MatTableDataSource, MatRadioButton } from '@angular/material';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,10 +20,15 @@ import Swal from 'sweetalert2';
 })
 export class GenexamLecturaComponent implements OnInit {
 
+
+
   favoriteSeason: string;
-  radios: any[] = [{ indice: 0, texto: 'Uno' }, { indice: 1, texto: 'Uno' }, { indice: 2, texto: 'Uno' }, { indice: 3, texto: 'Uno' }];
+  radios: any[] = [{ indice: 0, texto: 'Uno' }, { indice: 1, texto: 'Dos' }, { indice: 2, texto: 'Tres' }, { indice: 3, texto: 'Cuatro' }];
   indiceSeleccionado: number
 
+  //El siguiente arreglo es para modificar en el SElect texto o preguntas, o agregar nueva pregunta
+  seleccionModificar = ['Modificar Lectura', 'Modificar Pregunta'/*, 'Agregar Pregunta'*/]
+  miOpcionModificacion: string
 
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -44,12 +49,18 @@ export class GenexamLecturaComponent implements OnInit {
   indiceTab: number = 0
   selectedValue: string
 
-  materias: string[] = ['Materia demo', 'Informática 2', 'Informática 4', 'Lenguajes y comunicación 1', 'Lenguajes y comunicación 2', 'Literatura 1', 'Literatura 2', 'Taller de análisis de textos 1', 'Taller de análisis de textos 2']
+  materias: string[] = ['Materia demo',
+    'Informática 2', 'Informática 4', 'Lenguajes y comunicación 1', 'Lenguajes y comunicación 2',
+    'Literatura 1', 'Literatura 2', 'Taller de análisis de textos 1',
+    'Taller de análisis de textos 2']
   materia: string
 
   idValido = false;
   bloqueExamen: any[] = [{ nombre: 'diagnostico', nombreLargo: 'Diagnóstico' }, { nombre: 'b1', nombreLargo: 'Bloque 1' }, { nombre: 'b2', nombreLargo: 'Bloque 2' }, { nombre: 'b3', nombreLargo: 'Bloque 3' }]
   bloque: any
+
+  //Menu de preguntas para modificar una pregunta
+  menuPreguntas:Pregunta[]=[]
 
   public form: FormGroup;
   //Numero de la pregunta
@@ -61,11 +72,13 @@ export class GenexamLecturaComponent implements OnInit {
   tituloLectura: string
   miContenido: string
   conjunto: Conjunto
+  indiceConjunto: number
   preguntaActual: Pregunta = {};
   opcionesActuales: Opcion[] = []
   preguntas: Pregunta[] = []
   conjuntos: Conjunto[] = []
   idExamen: string
+  indicePregunta:number
 
 
   displayedColumns: string[] = ['numero', 'titulo'];
@@ -82,7 +95,7 @@ export class GenexamLecturaComponent implements OnInit {
   ngOnInit() {
 
 
-    this.preguntaActual.opciones = this.opcionesActuales
+    //this.preguntaActual.opciones = this.opcionesActuales
 
     this.iniciarFormulario()
     // 
@@ -106,7 +119,7 @@ export class GenexamLecturaComponent implements OnInit {
 
 
   cargarReactivos(materia: string, bloque: any) {
-
+    this.indiceTab = 0
     this.materia = materia
     this.bloque.nombre = bloque.nombre
 
@@ -162,6 +175,27 @@ export class GenexamLecturaComponent implements OnInit {
 
     event.setContents(this.content)
     console.log("INvocado al crearlo " + JSON.stringify(event.content))
+    this.contenido = this.content
+    this.editor = this.quill.content
+    //event.enable(false);   
+
+
+  }
+
+  creadoModificar(event: Quill) {
+    // tslint:disable-next-line:no-console
+    this.quill = event
+
+
+    //let jsonString = localStorage.getItem("contenido");
+    //event.content = JSON.parse(jsonString);
+
+    //El contenido de el editor a JSON
+    //this.content = JSON.parse(jsonString);
+    this.conjunto.textoGeneral
+
+    event.setContents(JSON.parse(this.conjunto.textoGeneral))
+    console.log("INvocado al crearlo modificarlo")
     this.contenido = this.content
     this.editor = this.quill.content
     //event.enable(false);   
@@ -370,7 +404,7 @@ export class GenexamLecturaComponent implements OnInit {
         }
 
         this.http.post<Estatus>(Globales.urlBase + "/examen-lectura", this.examenLectura).subscribe(
-          
+
           estatus => {
             console.log("SE ha enbviado con exito")
             this.estatus = estatus;
@@ -387,8 +421,149 @@ export class GenexamLecturaComponent implements OnInit {
 
 
           })
-        }
-      })
-    }
+      }
+    })
   }
+
+
+  //Modificar un conjunto  ya encontardo
+  modificar(miConjunto: Conjunto, indice: number) {
+    //NO sabemos qué demonios modificará de los 3 por lo tanto asignamos cada una de las 3 
+   // 1. Conjunto.
+    this.conjunto = miConjunto
+    this.indiceConjunto = indice
+  
+
+    //2. Preguntas de dicho conjunto
+    this.preguntas=this.conjunto.preguntas
+
+
+    //Obtenemos 
+    console.log("Titulo " + miConjunto.titulo)
+    console.log("Indice de la ṕregunta " + indice)
+    console.log("Preguntas totales "+this.preguntas.length)
+
+
+    this.indiceTab = 2
+
+
+
+
+  }
+
+  modificarPregunta(pregunta:Pregunta, indicePregunta:number){
+
     
+
+    this.form.controls['opcion1'].setValue(this.preguntaActual.opciones[0].titulo)
+    this.form.controls['opcion2'].setValue(this.preguntaActual.opciones[1].titulo)
+    this.form.controls['opcion3'].setValue(this.preguntaActual.opciones[2].titulo)
+    this.form.controls['opcion4'].setValue(this.preguntaActual.opciones[3].titulo)
+
+  
+  }
+modificarPregunta2(i:number){
+  console.log("indice de pregunta "+i)
+  this.indicePregunta=i
+}
+  actualizarPregunta(){
+    //console.log("la opcion 2 ess"+this.op2.checked);
+   
+
+
+    // console.log(contenido)
+    let tituloPregunta = this.form.get('titulo').value
+    console.log(tituloPregunta)
+    let op1 = this.form.get('opcion1').value
+    console.log(op1)
+    let op2 = this.form.get('opcion2').value
+    console.log(op2)
+    let op3 = this.form.get('opcion3').value
+    console.log(op3)
+    let op4 = this.form.get('opcion4').value
+    console.log(op4);
+    console.log(this.indiceSeleccionado);
+
+    //creamos opciones de la pregunta
+    this.opcionesActuales = [
+      { titulo: op1, acierto: false },
+      { titulo: op2, acierto: false },
+      { titulo: op3, acierto: false },
+      { titulo: op4, acierto: false }
+    ]
+
+    //Ajustamos el valor de la opción valida
+    console.log("indice seleccionadfo "+this.indiceSeleccionado)
+    this.opcionesActuales[this.indiceSeleccionado].acierto = true
+
+    this.preguntaActual.opciones=this.opcionesActuales
+    this.preguntas[this.indicePregunta]=this.preguntaActual
+    this.examenLectura.conjuntos[this.indiceConjunto]=this.conjunto
+
+    //Actualizamos
+
+
+
+    this.http.post<Estatus>(Globales.urlBase + "/examen-lectura/"+this.idExamen+"/"+this.indiceConjunto+"/"+this.indicePregunta,this.preguntaActual).subscribe(
+
+      estatus => {
+       
+        this.estatus = estatus;
+
+ console.log("SE ha enbviado con exito mensaje "+this.estatus.mensaje)
+
+
+
+        //Ni modo borramos las preguntas y los conjuntos
+        this.preguntas = []
+        this.conjuntos = []
+        this.preguntaActual={}
+        //Desabilitamos los tabs
+        this.idValido = false
+        Swal.fire({
+          icon: 'success',
+          title: 'Lectura',
+          confirmButtonText: 'Lectura modificada con éxito',
+          text: this.estatus.mensaje,
+        })
+
+
+
+      })
+
+
+
+  }
+
+  modificarLectura() {
+
+    this.examenLectura.conjuntos[this.indiceConjunto].textoGeneral = this.miContenido
+
+    this.http.post<Estatus>(Globales.urlBase + "/examen-lectura"+"/"+this.idExamen+"/"+this.indiceConjunto+"/"+this.indicePregunta,this.preguntaActual).subscribe(
+
+      estatus => {
+        console.log("SE ha enbviado con exito")
+        this.estatus = estatus;
+
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Lectura',
+          confirmButtonText: 'Lectura modificada con éxito',
+          text: this.estatus.mensaje,
+        })
+
+        //Ni modo borramos las preguntas y los conjuntos
+        this.preguntas = []
+        this.conjuntos = []
+        //Desabilitamos los tabs
+        this.idValido = false
+
+
+
+      })
+  }
+  opcionSeleccionada(opcion: string) {
+    console.log("Opcion es " + opcion)
+  }
+}

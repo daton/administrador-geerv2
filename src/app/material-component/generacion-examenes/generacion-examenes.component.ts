@@ -52,13 +52,15 @@ export class GeneracionExamenesComponent implements OnInit {
   id: string
 
   bloqueExamen: any[] = [{nombre: 'diagnostico', nombreLargo: 'Diagnóstico' },{ nombre: 'b1', nombreLargo: 'Bloque 1' }, { nombre: 'b2', nombreLargo: 'Bloque 2' }, { nombre: 'b3', nombreLargo: 'Bloque 3' }]
-  bloque: string
+  bloque: string=null
   examen: Examen = {}
   mostrarFormulario: boolean
   mostrarSeleccionarMateria: boolean
 
 
   public form: FormGroup;
+
+  public formita:FormGroup;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   //dataSource = new MatTableDataSource(this.excelPracticas)
@@ -67,7 +69,7 @@ export class GeneracionExamenesComponent implements OnInit {
 
 
 
-
+seleccionMateriaBloque:boolean=false
 
   preguntas: Pregunta[] = []
 
@@ -87,6 +89,7 @@ export class GeneracionExamenesComponent implements OnInit {
 
 
   ngOnInit() {
+  
 //Reiniciamos los reactrivos, para la vez que los examenes no tienen ningun reactivo
 this.examen={}
 this.preguntas=[]
@@ -97,6 +100,7 @@ this.examen.preguntas=this.preguntas
     this.mostrarPreguntas = false
     this.mostrarFormulario = false
     this.iniciarFormulario()
+    this.iniciarFormulario2()
 
 
   }
@@ -233,7 +237,16 @@ this.mostrarSeleccionarMateria=false
 
 
   }
-  //Metodo para inicia el formulario
+  //Metodo para inicia el formularios
+
+  iniciarFormulario2(){
+    this.formita=this.fb.group({
+      materia:[null, Validators.compose([Validators.required])],
+      bloque:[null, Validators.compose([Validators.required])]
+
+      
+    })
+  }
   iniciarFormulario() {
     this.form = this.fb.group({
 

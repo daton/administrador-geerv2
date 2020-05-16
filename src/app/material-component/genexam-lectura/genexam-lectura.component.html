@@ -54,10 +54,10 @@
 
                             <!-- Position Column -->
                             <ng-container matColumnDef="numero">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>Modificar</mat-header-cell>
-                                <mat-cell *matCellDef="let conjunto">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Número de preguntas</mat-header-cell>
+                                <mat-cell *matCellDef="let conjunto; let i = index;">
 
-                                    <button mat-button class="fondo" (click)="modificar(pregunta.numero)">
+                                    <button mat-button class="fondo" (click)="modificar(conjunto, i)">
                                         <mat-icon>create</mat-icon>
                                         {{conjunto.preguntas.length}}
                                     </button>
@@ -68,7 +68,7 @@
 
                             <!-- Position Column -->
                             <ng-container matColumnDef="titulo">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Título. </mat-header-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Título de la lectura </mat-header-cell>
                                 <mat-cell *matCellDef="let conjunto">
                                         {{conjunto.titulo}}           
                                 </mat-cell>
@@ -90,12 +90,13 @@
                     <div fxLayout="row wrap">
 
                         <div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                        <p><strong>1. </strong>Introduza el título de su lectura</p>
                             <mat-form-field>
-                                <input matInput placeholder="Introduce el título de la lectura" name="numero" [(ngModel)]="tituloLectura">
+                                <input matInput placeholder="Escriba aquí el título de la lectura" name="numero" [(ngModel)]="tituloLectura">
                             </mat-form-field>
                         </div>
                         
-                        <p>A continuacion introduzca la lectura, puede copiar y pegar texto desde microsoft word,
+                        <p><strong>2. </strong>A continuacion introduzca la lectura, puede copiar y pegar texto desde microsoft word,
                             las imágenes se insertan desde un archivo en formato png o jpg.
                         </p>
                         <quill-editor [styles]="{height: '450px'}" (onFocus)="focus($event)" (onBlur)="blur($event)"
@@ -114,6 +115,7 @@
 
                                 <div fxFlex.gt-md="100" fxFlex="100">
                                     <!--El puto titulo-->
+                                    <p><strong>3. </strong>Introduzca sus preguntas.</p>
                                     <mat-form-field>
                                         <textarea matInput placeholder="Escribir el texto de la pregunta"
                                             cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="4"
@@ -130,7 +132,7 @@
                                 <mat-radio-group name="selectedValue" [formControl]="form.controls['selectedValue']"
                                     [(ngModel)]="indiceSeleccionado">
                                  
-                                    <mat-radio-button [value]="radios[0].indice">Es correcta</mat-radio-button>
+                                    <mat-radio-button [value]="radios[0].indice"  >Es correcta</mat-radio-button>
                                
                                         <mat-form-field>
                                             <textarea matInput placeholder="Opción 1"
@@ -182,13 +184,15 @@
                                 <br>
                             <!--{indiceSeleccionado}}-->
                                 <br>
+    
                                 <mat-card-actions>
                                     <button mat-raised-button color="primary" (click)="guardarPregunta()"
-                                        type="submit" [disabled]="!form.valid">Agregar y crear otra Pregunta</button>
+                                        type="submit" [disabled]="!form.valid">Agregar pregunta</button>
 
                                     <button mat-raised-button color="primary" (click)="finalizar" [disabled]="!puedeGuardar" (click)="guardarExamenLectura()">Finalizar
-                                        y Guardar</button>
+                                        </button>
                                 </mat-card-actions>
+                                <p><strong>*Nota: </strong> Para cada pregunta nueva no olvide oprimir Agregar pregunta. Al terminar oprima Finalizar para generar el examen </p><br>
 
                             </div>
                         </form>
@@ -197,6 +201,148 @@
                     <!--tERMINA LA PREGUNTA-->
 
 
+                </div>
+            </mat-tab>
+
+            <!--Inicia Tab de modificacion de uin conjunto previo-->
+            <!------------------------------------------------------------------------------------------------------------>
+            <mat-tab label="Modificar lectura"  disabled>
+                <div class="demo-tab-content">
+                    <div fxLayout="row wrap">
+                      
+                        <h4><strong>1. </strong>Seleccione lo que desee modificar</h4><br>
+                        <div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                            <mat-form-field>
+                                <mat-select placeholder="Seleccione una opción" [(ngModel)]="miOpcionModificacion"  (selectionChange)="opcionSeleccionada(miOpcionModificacion)">
+                                    <mat-option *ngFor="let seleccion of seleccionModificar" [value]="seleccion" >
+                                        {{seleccion}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                   
+                    </div>
+                  <!--El contenedor si la opcion a modificar es  el texto de dicho conjunto-->  
+                  <div  *ngIf="miOpcionModificacion==='Modificar Lectura'">
+                    
+                  
+                      <quill-editor [styles]="{height: '450px'}" (onFocus)="focus($event)" (onBlur)="blur($event)"
+                      (onEditorCreated)=creadoModificar($event) (onContentChanged)="cambiar($event)" theme="snow"
+                      ([ngModel])="editor">
+                  </quill-editor>
+                 
+                  
+               
+                    <button mat-raised-button color="primary" (click)="modificarLectura()">Guardar cambios</button>
+                
+                  </div>
+                  <!--Termina Modificar lectura-->
+                  <!--El contenedor si la opcion a modificar es la pregunta seleccionada del dicho conjunto   -->
+                  <div  *ngIf="miOpcionModificacion==='Modificar Pregunta'">
+                      <h4><strong>2. </strong>Selecciona la Pregunta</h4>
+
+                      <mat-form-field>
+                        <mat-select placeholder="Selecciona una pregunta" [(ngModel)]="preguntaActual"  (selectionChange)="modificarPregunta(pregun,i)">
+                            <mat-option *ngFor="let pregun of preguntas;let i = index;" [value]="pregun"  (click)="modificarPregunta2(i)">
+                                {{pregun.titulo}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <!--SE muestra el formulario de la pregunta cuando la pergunta ya ha sido seleccionada-->
+                   <div *ngIf="preguntaActual.titulo!=null">
+                    <form class="basic-form" [formGroup]="form">
+                        <div fxLayout="row wrap">
+
+
+
+
+
+                            <div fxFlex.gt-md="100" fxFlex="100">
+                                <!--El puto titulo-->
+                                <p><strong>3. </strong>Modifique lo necesario.</p>
+                                <mat-form-field>
+                                    <textarea matInput placeholder="Escribir el texto de la pregunta"
+                                        cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="4"
+                                        cdkAutosizeMaxRows="12" [formControl]="form.controls['titulo']" [(ngModel)]="preguntaActual.titulo"
+                                        name="titulo" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100"></textarea>
+                                </mat-form-field>
+                                <mat-hint
+                                    *ngIf="form.controls['titulo'].hasError('required') && form.controls['titulo'].touched"
+                                    class="text-danger font-14">Debe escribir el texto de la
+                                    pregunta </mat-hint>
+                            </div>
+                            <!--Termina el puto titulo-->
+
+                            <mat-radio-group name="selectedValue" [formControl]="form.controls['selectedValue']"
+                                [(ngModel)]="indiceSeleccionado">
+                             
+                                <mat-radio-button [value]="radios[0].indice" [checked]="preguntaActual.opciones[0].acierto"   >Es correcta</mat-radio-button>
+                           
+                                    <mat-form-field>
+                                        <textarea matInput placeholder="Opción 1"
+                                            [formControl]="form.controls['opcion1']" name="opcion1"></textarea>
+                                    </mat-form-field>
+                              
+                                <mat-hint
+                                    *ngIf="form.controls['opcion1'].hasError('required') && form.controls['opcion1'].touched"
+                                    class="text-danger font-14">Debe escribir la opción
+                                </mat-hint>
+                            
+
+                                <mat-radio-button    [value]="radios[1].indice" [checked]="preguntaActual.opciones[1].acierto"  >Es
+                                    correcta      </mat-radio-button>
+                                <mat-form-field>
+                                    <textarea matInput placeholder="Opción 2"
+                                        [formControl]="form.controls['opcion2']" name="opcion1"></textarea>
+                                </mat-form-field>
+                                <mat-hint
+                                    *ngIf="form.controls['opcion2'].hasError('required') && form.controls['opcion2'].touched"
+                                    class="text-danger font-14">Debe escribir la opción
+                                </mat-hint>
+
+                                <mat-radio-button      [value]="radios[2].indice" [checked]="preguntaActual.opciones[2].acierto" >Escorrecta</mat-radio-button>
+                                <mat-form-field>
+                                    <textarea matInput placeholder="Opción 3"
+                                        [formControl]="form.controls['opcion3']" name="opcion3"></textarea>
+                                </mat-form-field>
+
+                                <mat-hint
+                                    *ngIf="form.controls['opcion3'].hasError('required') && form.controls['opcion3'].touched"
+                                    class="text-danger font-14">Debe escribir la opción
+                                </mat-hint>
+
+                                <mat-radio-button   [value]="radios[3].indice" [checked]="preguntaActual.opciones[3].acierto" >Es correcta</mat-radio-button>
+                                <mat-form-field>
+                                    <textarea matInput placeholder="Opción 4"
+                                        [formControl]="form.controls['opcion4']" name="opcion4"></textarea>
+                                </mat-form-field>
+                                <mat-hint
+                                    *ngIf="form.controls['opcion4'].hasError('required') && form.controls['opcion4'].touched"
+                                    class="text-danger font-14">Debe escribir la opción
+                                </mat-hint>
+
+
+                            </mat-radio-group>
+
+
+                            <br>
+                        <!--{indiceSeleccionado}}-->
+                            <br>
+
+                            <mat-card-actions>
+                                <button mat-raised-button color="primary" (click)="actualizarPregunta()">Actualizar pregunta</button>                
+                            </mat-card-actions>
+
+                        </div>
+                    </form>
+                   </div>
+
+                  </div>
+                  <!--El contenedor si la opcion  es agregar una nueva pregunta a dicho conjunto-->
+                  <div fxLayout="row" *ngIf="miOpcionModificacion==='Agregar Pregunta'">
+                    <p>Agregar una nueva Pregunta</p>
+                </div>
+               
                 </div>
             </mat-tab>
         </mat-tab-group>
