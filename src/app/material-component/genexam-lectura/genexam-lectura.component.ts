@@ -412,7 +412,7 @@ export class GenexamLecturaComponent implements OnInit {
 
 
 
-            //Ni modo borramos las preguntas y los conjuntos
+            //Ni modo borramos las preguntas y los conjuntosddda
             this.preguntas = []
             this.conjuntos = []
             //Desabilitamos los tabs
