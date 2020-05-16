@@ -429,7 +429,7 @@ export class GenexamLecturaComponent implements OnInit {
   //Modificar un conjunto  ya encontardo
   modificar(miConjunto: Conjunto, indice: number) {
     //NO sabemos qué demonios modificará de los 3 por lo tanto asignamos cada una de las 3 
-   // 1. Conjunto.
+   // 1. Conjunto.   sssss
     this.conjunto = miConjunto
     this.indiceConjunto = indice
   
