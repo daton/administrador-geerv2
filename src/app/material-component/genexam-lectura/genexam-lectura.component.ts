@@ -27,7 +27,7 @@ export class GenexamLecturaComponent implements OnInit {
   indiceSeleccionado: number
 
   //El siguiente arreglo es para modificar en el SElect texto o preguntas, o agregar nueva pregunta
-  seleccionModificar = ['Modificar Lectura', 'Modificar Pregunta'/*, 'Agregar Pregunta'*/]
+  seleccionModificar = ['Modificar Lectura', 'Modificar Pregunta', 'Agregar Pregunta']
   miOpcionModificacion: string
 
 
@@ -119,6 +119,12 @@ export class GenexamLecturaComponent implements OnInit {
 
 
   cargarReactivos(materia: string, bloque: any) {
+
+   
+    //Inicamos todos
+    this.preguntas=[]
+    console.log("Preguntas en el poool "+this.preguntas.length)
+    this.preguntaActual={}
     this.indiceTab = 0
     this.materia = materia
     this.bloque.nombre = bloque.nombre
@@ -302,6 +308,13 @@ export class GenexamLecturaComponent implements OnInit {
 
 
     }
+    if(clickedIndex==1){
+      //Este es muy importante, si no inicias a las preguntas en cero  se van a acmumular en las siguientes lecturs
+      this.conjunto={}
+      this.preguntas=[]
+      console.log("Nueva lectura pregs "+this.preguntas.length)
+
+    }
 
   }
   guardarPregunta() {
@@ -403,6 +416,8 @@ export class GenexamLecturaComponent implements OnInit {
 
         }
 
+        console.log("Preguntas que saldran fueraAAAAA "+this.preguntas)
+
         this.http.post<Estatus>(Globales.urlBase + "/examen-lectura", this.examenLectura).subscribe(
 
           estatus => {
@@ -453,7 +468,7 @@ export class GenexamLecturaComponent implements OnInit {
 
   modificarPregunta(pregunta:Pregunta, indicePregunta:number){
 
-    
+    this.iniciarFormulario();
 
     this.form.controls['opcion1'].setValue(this.preguntaActual.opciones[0].titulo)
     this.form.controls['opcion2'].setValue(this.preguntaActual.opciones[1].titulo)
@@ -466,6 +481,9 @@ modificarPregunta2(i:number){
   console.log("indice de pregunta "+i)
   this.indicePregunta=i
 }
+
+
+
   actualizarPregunta(){
     //console.log("la opcion 2 ess"+this.op2.checked);
    
@@ -565,5 +583,91 @@ modificarPregunta2(i:number){
   }
   opcionSeleccionada(opcion: string) {
     console.log("Opcion es " + opcion)
+
+    if(opcion==='Agregar Pregunta'){
+      this.iniciarFormulario()
+      this.form.reset();
+      this.preguntaActual={}
+      //El siguiente es para asignar el nuevo indice que debe ser el de la ultima pregunta
+   let indiceUltimaPregunta=   this.conjunto.preguntas.length;
+   console.log("El indice de la ultima prg. sera "+indiceUltimaPregunta+" El conjunto es "+this.indiceConjunto);
+    }
+  }
+
+  guardarPreguntaAlConjunto(){
+    let indiceUltimaPregunta=   this.conjunto.preguntas.length;
+
+    
+    // console.log(contenido)
+    let tituloPregunta = this.form.get('titulo').value
+    console.log(tituloPregunta)
+    let op1 = this.form.get('opcion1').value
+    console.log(op1)
+    let op2 = this.form.get('opcion2').value
+    console.log(op2)
+    let op3 = this.form.get('opcion3').value
+    console.log(op3)
+    let op4 = this.form.get('opcion4').value
+    console.log(op4);
+    console.log(this.indiceSeleccionado);
+
+    //creamos opciones de la pregunta
+    this.opcionesActuales = [
+      { titulo: op1, acierto: false },
+      { titulo: op2, acierto: false },
+      { titulo: op3, acierto: false },
+      { titulo: op4, acierto: false }
+    ]
+
+    //Ajustamos el valor de la opción valida
+    console.log("indice seleccionadfo "+this.indiceSeleccionado)
+    this.opcionesActuales[this.indiceSeleccionado].acierto = true
+
+    this.preguntaActual.opciones=this.opcionesActuales
+    this.preguntaActual.titulo=tituloPregunta
+  //Para una nueva pregunta solo necesitamos el indice del conjunto, el id del examen y la prgunta  misma
+  let idExamen=this.idExamen
+  let idConjunto=this.indiceConjunto
+  console.log("SALIDA id examen"+idExamen+" SALIDA INDICE CONJUNTO "+idConjunto);
+   
+
+  this.http.post<Estatus>(Globales.urlBase + "/examen-lectura/nueva-pregunta/"+this.idExamen+"/"+this.indiceConjunto,this.preguntaActual).subscribe(
+
+    estatus => {
+     
+      this.estatus = estatus;
+
+console.log("SE ha enbviado con exito mensaje "+this.estatus.mensaje)
+
+
+
+      //Ni modo borramos las preguntas y los conjuntos
+      this.preguntas = []
+    //  this.conjuntos = []
+      this.preguntaActual={}
+      this.form.reset();
+      //Desabilitamos los tabs
+    //  this.idValido = false
+      Swal.fire({
+        icon: 'success',
+        title: 'Pregunta de lectura',
+        confirmButtonText: 'Pregunta agregada',
+        text: this.estatus.mensaje,
+      })
+
+
+
+    })
+
+
+
+  }
+//Muy importante el siguiente es para regresa al menu inicial
+  regresar(){
+    this.idValido = false
+    this.conjuntos=[]
+    this.conjunto={}
+    this.preguntas=[]
+    this.preguntaActual={}
   }
 }

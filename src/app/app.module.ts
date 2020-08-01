@@ -57,11 +57,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SharedModule,
     NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot(AppRoutes),
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireMessagingModule,
-    AngularFireModule,
-  // ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
-    ServiceWorkerModule.register('fcm-sw.js', { enabled: environment.production })
+  
+   ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+  //  ServiceWorkerModule.register('fcm-sw.js', { enabled: environment.production })
   ],
   providers: [
 

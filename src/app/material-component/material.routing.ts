@@ -13,6 +13,7 @@ import { CargarAndamiosComponent } from './cargar-andamios/cargar-andamios.compo
 import { MensajeriaComponent } from './mensajeria/mensajeria.component';
 import { AlumnosTotalesComponent } from './alumnos-totales/alumnos-totales.component';
 import { GenexamLecturaComponent } from './genexam-lectura/genexam-lectura.component';
+import { GeneraexamOpcionesComponent } from './generaexam-opciones/generaexam-opciones.component';
 
 export const MaterialRoutes: Routes = [
   {
@@ -117,6 +118,17 @@ export const MaterialRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
             { title: 'Generación de códigos' }
+          ]
+        }
+      },
+      {
+        path: 'generaexam-opciones',
+        component: GeneraexamOpcionesComponent,
+        data: {
+          title: 'Examenes de opciones (nuevo)',
+          urls: [
+            { title: 'Dashboard', url: '/dashboard' },
+            { title: 'Examenes de opciones (nuevo)' }
           ]
         }
       },

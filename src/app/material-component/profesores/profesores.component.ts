@@ -29,7 +29,7 @@ export class ProfesoresComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   dataSource: MatTableDataSource<Profesor>
 
-  displayedColumns = ['clave', 'nombre','usuario', 'password','fecha'];
+  displayedColumns = ['clave', 'nombre','usuario', 'password','fecha', 'hora'];
 
   indiceTab = 0;
   agregado: boolean
@@ -90,6 +90,36 @@ export class ProfesoresComponent implements OnInit {
     'Mixto'
 
   ];
+  
+  listaAreasMaterias: any[] = [
+    {area:'Informática', nombre: 'Informática 1', prefijo: 'INF1' },
+    {area:'Informática',  nombre: 'Informática 2', prefijo: 'INF2' },
+    {area:'Informática',  nombre: 'Informática 3', prefijo: 'INF3' },
+    {area:'Informática',  nombre: 'Informática 4', prefijo: 'INF4' },
+
+    {area:'Matemáticas', nombre: 'Matemáticas 1', prefijo: 'MAT1' },
+    {area:'Matemáticas', nombre: 'Matemáticas 2', prefijo: 'MAT2' },
+    {area:'Matemáticas', nombre: 'Matemáticas 3', prefijo: 'MAT3' },
+    {area:'Matemáticas', nombre: 'Matemáticas 4', prefijo: 'MAT4' },
+    {area:'Matemáticas', nombre: 'Matemáticas 5', prefijo: 'MAT5' },
+    {area:'Matemáticas', nombre: 'Matemáticas 6', prefijo: 'MAT6' },
+
+    {area:'Comunicación', nombre: 'Lenguajes y comunicación 1', prefijo: 'LYC1' },
+    { area:'Comunicación',nombre: 'Lenguajes y comunicación 2', prefijo: 'LYC2' },
+    {area:'Comunicación', nombre: 'Literatura 1', prefijo: 'LIT1' },
+    {area:'Comunicación', nombre: 'Literatura 2', prefijo: 'LIT2' },
+    { area:'Comunicación',nombre: 'Taller de análisis de textos 1', prefijo: 'TAT1' },
+    {area:'Comunicación', nombre: 'Taller de análisis de textos 2', prefijo: 'TAT2' },
+
+  {area:'Desarrollo Humano', nombre: 'Orientación educativa', prefijo: 'OED' },
+    {area:'Desarrollo Humano', nombre: 'Orientación vocacional', prefijo: 'OVO' },
+    {area:'Desarrollo Humano', nombre: 'Artísticas 1', prefijo: 'ART1' },
+    {area:'Desarrollo Humano', nombre: 'Artísticas 2', prefijo: 'ART2' },
+    {area:'Desarrollo Humano', nombre: 'Introducción al trabajo', prefijo: 'TRA' },
+    {area:'Desarrollo Humano', nombre: 'Administración de recursos humanos', prefijo: 'ARH' },
+    {area:'Desarrollo Humano', nombre: 'Actividades deportivas 1', prefijo: 'ADE1' },
+    {area:'Desarrollo Humano', nombre: 'Actividades deportivas 2', prefijo: 'ADE2' }
+  ]
   listaMaterias: string[] = [
     'Informática 1',
     'Informática 2',
@@ -104,8 +134,8 @@ export class ProfesoresComponent implements OnInit {
     //El siguiente breakpoint es para hacer responsiva cada fila
     breakpointObserver.observe(['(max-width: 600px)']).subscribe(result => {
       this.displayedColumns = result.matches ?
-      ['clave', 'nombre','usuario', 'password','fecha']:
-      ['clave', 'nombre','usuario', 'password','fecha'];
+      ['clave', 'nombre','usuario', 'password','fecha', 'hora']:
+      ['clave', 'nombre','usuario', 'password','fecha','hora'];
     });
 
   }
@@ -198,21 +228,21 @@ this.http.get<Profesor[]>(Globales.urlBase+"/profesor").subscribe(
 
 
     //La materias
-   // console.log("La materias:" + this.form.get('materias').value)
+    console.log("La materias:" + this.form.get('materias').value)
 
-   // let valores = "" + this.form.get('materias').value
-  // let materiasSeleccionadas = valores.split(',')
-  //  console.log("primera" + materiasSeleccionadas[0]);
-  /*  materiasSeleccionadas.forEach(elemento => {
+    let valores = "" + this.form.get('materias').value
+   let materiasSeleccionadas = valores.split(',')
+    console.log("primera" + materiasSeleccionadas[0]);
+   materiasSeleccionadas.forEach(elemento => {
       this.materias.push({
        campo: this.form.get('areas').value,
        nombre: elemento
       });
-   })*/
+   })
 
  //   console.log("Todas las materias ya generadas:" + JSON.stringify(this.materias));
 
-  //this.profesor.materias=this.materias
+  this.profesor.materias=this.materias
 
     // Enviamos a http
     this.http.put(Globales.urlBase + "/profesor", this.profesor).subscribe(
@@ -234,7 +264,7 @@ this.http.get<Profesor[]>(Globales.urlBase+"/profesor").subscribe(
       }
     )
 
-    console.log("Registra profesor:" + JSON.stringify(this.profesor))
+    console.log("Profesor que se selecciono:" + JSON.stringify(this.profesor))
     this.materias = []
   }
 
@@ -280,12 +310,28 @@ this.http.get<Profesor[]>(Globales.urlBase+"/profesor").subscribe(
 
     //Ajustamos los valore en cada uno de los campos
     var materiasLeidas:string[]=[]
+    this.listaMaterias=[]
 
     this.profesor.materias.forEach(materia=>{
               materiasLeidas.push(materia.nombre)
+           
     })
-    console.log("Materias solas leidas "+materiasLeidas)
+    //Las materias leidas son las materias que este profesor seleccino cuando se registro
+    console.log("Materias solas leidas "+materiasLeidas+" Area del profesor")
+
+
     this.form.get('materias').setValue(materiasLeidas);
+
+    //Ahora vamos a  llenar las materias con todas las posibles a seleccionar de esa area, que en la BD 
+    //el profesor la tiene como "campo"
+    //Barremos todas
+    this.listaAreasMaterias.forEach(fila=>{
+      if(fila.area===this.profesor.area){
+        this.listaMaterias.push(fila.nombre)
+      }
+    })
+
+
 
     //this.dejandoClaveProfesor();
 

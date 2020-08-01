@@ -1,0 +1,237 @@
+<mat-card *ngIf="mostrarSeleccionarMateria">
+  <mat-card-content>
+    <mat-card-title class="mb-3">Reactivos de opción múltiple</mat-card-title>
+    <div>
+
+      <!-- formita para  seleccion de la materia -->
+      <h4><strong>Version Beta.</strong> Esta versión es la primera con reactivos con imágenes y contenido de texto mejorado. Sujeto a observaciones del usuario.</h4>
+      <form [formGroup]="formita">
+        <div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+          <mat-form-field>
+            <mat-select placeholder="Selecciona una materia" [formControl]="formita.controls['materia']"
+              [(ngModel)]="materia" name="materia">
+              <mat-option *ngFor="let materia of materias" [value]="materia">
+                {{materia}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-hint *ngIf="formita.controls['materia'].hasError('required') && formita.controls['materia'].touched"
+            class="text-danger font-14">Debe seleccinar la opcion
+          </mat-hint>
+        </div>
+        <!--Bloque-->
+        <div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+          <mat-form-field>
+            <mat-select placeholder="Selecciona un bloque" [formControl]="formita.controls['bloque']"
+              [(ngModel)]="bloque" name="bloque">
+              <mat-option *ngFor="let bloquesin of bloqueExamen" [value]="bloquesin">
+                {{bloquesin.nombreLargo}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-hint *ngIf="formita.controls['bloque'].hasError('required') && formita.controls['bloque'].touched"
+            class="text-danger font-14">Debes seleccinar la opcion
+          </mat-hint>
+        </div>
+
+
+        <!--Boton-->
+        <br>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="cargarReactivos(materia, bloque)"
+            [disabled]="!formita.valid">Administrar Reactivos</button>
+        </mat-card-actions>
+
+      </form>
+    </div>
+
+    <!-- -------------------------------------------------------------------------------
+        TERMINA SELECCION DE MATERIA Y BLOQUE 
+    ------------------------------------------------------------------------------------->
+
+    <!-----------------------------------------------------------------------------
+        INICIA EL TAB DE CARGAR REACTIVOS   P
+    -->
+    <div *ngIf="puedeAdministrarReactivos">
+
+      <mat-tab-group class="demo-tab-group" [selectedIndex]="indiceTab" (selectedTabChange)="onTabChanged($event);">
+
+        <mat-tab label="Nueva pregunta">
+          <div class="demo-tab-content">
+            <div fxLayout="row wrap">
+              <p>Para borrar e introducir una nueva prgunta oprima el botón <strong>limpiar</strong> ubicado en la parte inferior</p>
+              <p><strong>1. </strong>Introduzca la pregunta, puede copiar y pegar texto desde microsoft word,
+                las imágenes se insertan desde un archivo en formato png o jpg.
+              </p>
+              <quill-editor [styles]="{height: '120px'}" (onFocus)="focus($event)" (onBlur)="blur($event)"
+                (onEditorCreated)=creado($event) (onContentChanged)="cambiar($event)" theme="snow">
+              </quill-editor>
+            <!--<button (click)="borrarQuill()">Borrar</button>-->
+			  <!--Inicia el formuario de las opciones-->
+		
+              <p><strong>2. </strong>Introduzca las opciones y seleccione la correcta.</p>
+              <form class="basic-form" [formGroup]="form">
+                <div fxLayout="row wrap">
+                  <mat-radio-group name="selectedValue" [formControl]="form.controls['selectedValue']"
+                    [(ngModel)]="indiceSeleccionado" >
+
+                    <mat-radio-button [value]="radios[0].indice" [checked]="radios[0].checado">Es correcta</mat-radio-button>
+
+                    <mat-form-field>
+                      <textarea matInput placeholder="Opción 1" [formControl]="form.controls['opcion1']"
+                        name="opcion1"  [(ngModel)]="opcion1"></textarea>
+                    </mat-form-field>
+
+                    <mat-hint *ngIf="form.controls['opcion1'].hasError('required') && form.controls['opcion1'].touched"
+                      class="text-danger font-14">Debe escribir la opción
+                    </mat-hint>
+
+
+                    <mat-radio-button [value]="radios[1].indice" [checked]="radios[1].checado" >Es correcta</mat-radio-button>
+                    <mat-form-field>
+                      <textarea matInput placeholder="Opción 2" [formControl]="form.controls['opcion2']"
+                        name="opcion1"></textarea>
+                    </mat-form-field>
+                    <mat-hint *ngIf="form.controls['opcion2'].hasError('required') && form.controls['opcion2'].touched"
+                      class="text-danger font-14">Debe escribir la opción
+                    </mat-hint>
+
+                    <mat-radio-button [value]="radios[2].indice" [checked]="radios[2].checado">Es correcta</mat-radio-button>
+                    <mat-form-field>
+                      <textarea matInput placeholder="Opción 3" [formControl]="form.controls['opcion3']"
+                        name="opcion3"></textarea>
+                    </mat-form-field>
+
+                    <mat-hint *ngIf="form.controls['opcion3'].hasError('required') && form.controls['opcion3'].touched"
+                      class="text-danger font-14">Debe escribir la opción
+                    </mat-hint>
+
+                    <mat-radio-button [value]="radios[3].indice" [checked]="radios[3].checado">Es correcta</mat-radio-button>
+                    <mat-form-field>
+                      <textarea matInput placeholder="Opción 4" [formControl]="form.controls['opcion4']"
+                        name="opcion4"></textarea>
+                    </mat-form-field>
+                    <mat-hint *ngIf="form.controls['opcion4'].hasError('required') && form.controls['opcion4'].touched"
+                      class="text-danger font-14">Debe escribir la opción
+                    </mat-hint>
+
+
+                  </mat-radio-group>
+			<!-- {{indiceSeleccionado}}-->
+      <div *ngIf="guardandoPregunta">
+        Guardando su reactivo, espere por favor...	
+        <mat-progress-bar mode="indeterminate" value="40" ></mat-progress-bar>
+      </div>
+			
+                </div>
+                <mat-card-actions>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid"
+                  (click)="guardarPregunta()">Guardar esta pregunta</button>
+                  <button mat-raised-button color="primary" (click)="limpiar()">Limpiar</button>
+                </mat-card-actions>
+              </form>
+
+              <!-- Termina el formulario de las opciones-->
+
+            </div>
+            <!--
+					<mat-card-actions>
+						
+						
+					<button mat-raised-button color="primary" (click)="leerPregunta()" >Leer pregunta</button>
+					</mat-card-actions>
+
+
+					<quill-editor [styles]="{height: '120px'}" 
+					(onEditorCreated)=creado2($event) theme="snow"
+					([ngModel])="editor2">
+				</quill-editor>
+			-->
+
+          </div>
+        </mat-tab>
+        <!--Inicia TAb para explorar reactivos-->
+        <!--INICIA TAB DE  PARA MOSTRAR LAS PREGUNTAS-->
+        <mat-tab label="Lista de Preguntas">
+          <div class="demo-tab-content">
+            <p>Nota: Por practicidad no se muestran la imágenes en los reactivos que las contienen, para visualizar o editar dé click en el botón de <strong>modificar.</strong> </p>
+          	<div *ngIf="guardandoPregunta">
+              Cargando lista de reactivos, espere por favor...	
+              <mat-progress-bar mode="indeterminate" value="40" ></mat-progress-bar>
+            </div>
+                <div class="responsive-table">
+					<mat-table #table [dataSource]="dataSource" matSort>
+
+
+						<!-- Position Column -->
+						<ng-container matColumnDef="numero">
+							<mat-header-cell *matHeaderCellDef mat-sort-header>Número de preguntas</mat-header-cell>
+							<mat-cell *matCellDef="let pregunta; let i = index;">
+                {{i+1}}
+								<button mat-button class="fondo" (click)="actualizar(pregunta, i)">
+									<mat-icon>create</mat-icon>
+								modificar
+								</button>
+								<button mat-button class="fondo" (click)="borrar(pregunta, i)">
+									<mat-icon>delete</mat-icon>
+									Borrar
+								</button>
+                
+
+							</mat-cell>
+						</ng-container>
+
+						<!-- Position Column -->
+						<ng-container matColumnDef="tituloTexto">
+							<mat-header-cell *matHeaderCellDef mat-sort-header> Título de la pregunta </mat-header-cell>
+							<mat-cell *matCellDef="let pregunta">
+									{{pregunta.tituloTexto}}           
+							</mat-cell>
+						</ng-container>
+
+
+						<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+						<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+					</mat-table>
+					<mat-paginator [pageSizeOptions]="[30, 60, 100]"></mat-paginator>
+				</div>
+         
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Vista Preliminar">
+          <div class="demo-tab-content">
+
+            <div *ngIf="guardandoPregunta">
+              Cargando lista de reactivos, espere por favor...	
+              <mat-progress-bar mode="indeterminate" value="40" ></mat-progress-bar>
+            </div>
+            <div *ngFor="let preguntaActual of preguntas;let i=index" layout-align="start center">
+
+              <!--   <h3 appBlockCopyPaste>{{i+1}}.-{{preguntaActual.tituloTexto}}</h3> -->
+              <!--<quill-view [content]="preguntaActual.tituloTexto"></quill-view>  -->
+              <mat-divider></mat-divider>
+              <strong>Texto de la pregunta {{i+1}}:</strong>
+              <quill-view [content]="quillBubles[i].content" format="object" theme="snow"></quill-view>
+              <span>Respuestas:</span>
+              <div *ngFor="let opcion of preguntaActual.opciones; let i=index" appBlockCopyPaste>
+                <p [ngClass]="opcion.acierto ? 'buena': 'mala'" class="texto">{{opcion.titulo}}</p>
+              </div>
+    
+    
+    
+            </div>
+          </div>
+        </mat-tab>
+
+
+      </mat-tab-group>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!--  
+
+<quill-view [content]="texto"></quill-view>
+
+-->

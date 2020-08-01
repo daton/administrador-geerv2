@@ -51,7 +51,8 @@ const MENUITEMS = [
       {state:'alumnos', name:'Datos de alumnos', type:'link'},
       {state:'respaldo-base', name:'Respaldo de BD', type:'link'},
       {state:'generacion-codigos', name:'Generación de códigos', type:'link'},
-      {state:'generacion-examenes', name:'Examenes de opciones', type:'link'},
+      {state:'generaexam-opciones', name:'*Examenes opciones', type:'link'},
+     // {state:'generacion-examenes', name:'Examenes de opciones', type:'link'},
       {state:'genexam-lectura', name:'Examenes de lecturas', type:'link'},
       {state:'cargar-videos', name:'Cargar videos', type:'link'},
       {state:'cargar-andamios', name:'Cargar andamios', type:'link'}

@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { SwUpdate, SwPush, UpdateAvailableEvent } from '@angular/service-worker';
 import { Administrador } from './modelo/administrador';
 import * as firebase from 'firebase/app';
-import 'firebase/messaging'
+
 import { environment } from '../environments/environment';
 import { Globales } from './modelo/globales';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import{mergeMapTo} from 'rxjs/operators'
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -20,16 +21,25 @@ export class AppComponent implements OnInit{
   token:string
 
 
-  constructor(private router: Router, private swUpdate: SwUpdate,private afMessaging: AngularFireMessaging) {
+  private promptUser(): void {
+    console.log('Actualizando a una nueva versión de admingeer');
+    this.swUpdate.activateUpdate().then(() => document.location.reload()); 
+  }
+  public checkForUpdates(): void {
+    this.swUpdate.available.subscribe(event => this.promptUser());
+  }
+
+  constructor(private router: Router, private swUpdate: SwUpdate) {
+    if (swUpdate.isEnabled) {
+      interval(6 * 60 * 60).subscribe(() => swUpdate.checkForUpdate()
+        .then(() => console.log('checcando actualizaciones....')));
+    
+        
+    }
+
+console.log("que tan bueno que este en el cosntructor me pregunto..")
 
 
-
-    //Firebase
-    /*
-    if (!firebase.apps.length) {
-      firebase.initializeApp(environment.firebase);
-      navigator.serviceWorker.getRegistration().then(swr => firebase.messaging().useServiceWorker(swr));
-    }*/
 
     //Leemos
     this.administrador = JSON.parse(localStorage.getItem('miAdministrador'));
@@ -40,47 +50,28 @@ export class AppComponent implements OnInit{
 
 
     } else {
-      console.log("Bieenvenido " + this.administrador.usuario)
+      console.log("Bieenvenid pfffffsss " + this.administrador.usuario)
     }
+    
+         
+}
+
+
+
+
+  
+  ngOnInit(): void {
+    console.log("antes de  refrescarsee");
     if (this.swUpdate.isEnabled) {
-      this.swUpdate.available.subscribe((event: UpdateAvailableEvent) => {
-        if (confirm("Nueva version disponible!, ¿Deseas descargarla?")) {
-          window.location.reload()
-        }
+
+      this.swUpdate.available.subscribe(() => {
+
+          if(confirm("Nueva versión ya disponible, Descargarla?")) {
+                console.log("Se debe refrescarsee");
+              window.location.reload();
+          }
       });
     }
-
-
-    /*
-
-    push.messages.subscribe(msg => console.log('push message', msg));
-    push.notificationClicks.subscribe(click => console.log('notification click', click));
-    if (!firebase.apps.length) {
-      firebase.initializeApp(environment.firebase);
-      navigator.serviceWorker.getRegistration().then(swr => firebase.messaging().useServiceWorker(swr));
-    }
-
-
-    //Invocamos el permity
-    setTimeout(() => {
-      this.permitToNotify();
-      console.log("Permitidoooo con tokensito Y SERVICE WORKER MODIFICADO " + this.displayToken)
-    }, 1800)
-
-    */
-
-  }
-  ngOnInit(): void {
-   
-    this.afMessaging.requestPermission
-    .pipe(mergeMapTo(this.afMessaging.tokenChanges))
-    .subscribe(
-      (token)=>{console.log('Permiso consedido!!! Guadar al back end',token)
-    this.token=token
-    },
-    (error)=>{
-      console.error(error);
-    })
         
 
 

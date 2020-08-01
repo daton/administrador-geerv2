@@ -71,6 +71,14 @@
                       {{profesor.fecha}}
                     </mat-cell>
                   </ng-container>
+
+                  <ng-container matColumnDef="hora">
+                    <mat-header-cell *matHeaderCellDef    mat-sort-header>Hora reg. </mat-header-cell>
+                    <mat-cell *matCellDef="let profesor">
+                      <span class="header-label">Fecha:</span>
+                      {{profesor.hora}}
+                    </mat-cell>
+                  </ng-container>
   
                   <!-- Symbol Column -->
                 

@@ -1,6 +1,6 @@
 <mat-card>
     <mat-card-content>
-        <mat-card-title class="mb-3">Examenes con lectura</mat-card-title>
+        <mat-card-title class="mb-3">Examenes con lectura.</mat-card-title>
         <h3>Nota: Esta página aun esta en construcción es solo un prototipo no terminado</h3>
 
 <!--------------------------------------------------------------------------------------------->        
@@ -60,6 +60,10 @@
                                     <button mat-button class="fondo" (click)="modificar(conjunto, i)">
                                         <mat-icon>create</mat-icon>
                                         {{conjunto.preguntas.length}}
+                                    </button>
+                                    <button mat-button class="fondo" (click)="borrar(conjunto, i)">
+                                        <mat-icon>delete</mat-icon>
+                                        Borrar
                                     </button>
 
 
@@ -338,9 +342,98 @@
                    </div>
 
                   </div>
+                    <!------------------------------------------------------------------------->
                   <!--El contenedor si la opcion  es agregar una nueva pregunta a dicho conjunto-->
                   <div fxLayout="row" *ngIf="miOpcionModificacion==='Agregar Pregunta'">
-                    <p>Agregar una nueva Pregunta</p>
+                
+                   
+                     <form class="basic-form" [formGroup]="form">
+                        <div fxLayout="row wrap">
+
+
+                            <div fxFlex.gt-md="100" fxFlex="100">
+                                <!--El puto titulo-->
+                        
+                                <mat-form-field>
+                                    <textarea matInput placeholder="Escribir el texto de la pregunta"
+                                        cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="4"
+                                        cdkAutosizeMaxRows="12" [formControl]="form.controls['titulo']"
+                                        name="titulo" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100"></textarea>
+                                </mat-form-field>
+                                <mat-hint
+                                    *ngIf="form.controls['titulo'].hasError('required') && form.controls['titulo'].touched"
+                                    class="text-danger font-14">Debe escribir el texto de la
+                                    pregunta </mat-hint>
+                            </div>
+                            <!--Termina el puto titulo-->
+
+                            <mat-radio-group name="selectedValue" [formControl]="form.controls['selectedValue']"
+                                [(ngModel)]="indiceSeleccionado">
+                             
+                                <mat-radio-button [value]="radios[0].indice"  >Es correcta</mat-radio-button>
+                           
+                                    <mat-form-field>
+                                        <textarea matInput placeholder="Opción 1"
+                                            [formControl]="form.controls['opcion1']" name="opcion1"></textarea>
+                                    </mat-form-field>
+                              
+                                <mat-hint
+                                    *ngIf="form.controls['opcion1'].hasError('required') && form.controls['opcion1'].touched"
+                                    class="text-danger font-14">Debe escribir la opción
+                                </mat-hint>
+                            
+
+                                <mat-radio-button [value]="radios[1].indice">Es
+                                    correcta</mat-radio-button>
+                                <mat-form-field>
+                                    <textarea matInput placeholder="Opción 2"
+                                        [formControl]="form.controls['opcion2']" name="opcion1"></textarea>
+                                </mat-form-field>
+                                <mat-hint
+                                    *ngIf="form.controls['opcion2'].hasError('required') && form.controls['opcion2'].touched"
+                                    class="text-danger font-14">Debe escribir la opción
+                                </mat-hint>
+
+                                <mat-radio-button [value]="radios[2].indice">Escorrecta</mat-radio-button>
+                                <mat-form-field>
+                                    <textarea matInput placeholder="Opción 3"
+                                        [formControl]="form.controls['opcion3']" name="opcion3"></textarea>
+                                </mat-form-field>
+
+                                <mat-hint
+                                    *ngIf="form.controls['opcion3'].hasError('required') && form.controls['opcion3'].touched"
+                                    class="text-danger font-14">Debe escribir la opción
+                                </mat-hint>
+
+                                <mat-radio-button [value]="radios[3].indice">Es correcta</mat-radio-button>
+                                <mat-form-field>
+                                    <textarea matInput placeholder="Opción 4"
+                                        [formControl]="form.controls['opcion4']" name="opcion4"></textarea>
+                                </mat-form-field>
+                                <mat-hint
+                                    *ngIf="form.controls['opcion4'].hasError('required') && form.controls['opcion4'].touched"
+                                    class="text-danger font-14">Debe escribir la opción
+                                </mat-hint>
+
+
+                            </mat-radio-group>
+
+                        <!--{indiceSeleccionado}}-->
+                            <br>
+
+                            <mat-card-actions>
+                                <button mat-raised-button color="primary" (click)="guardarPreguntaAlConjunto()"
+                                    type="submit" [disabled]="!form.valid">Agregar pregunta</button>
+                                    <button mat-raised-button color="primary" (click)="regresar()">Regresar</button>     
+
+                        
+                            </mat-card-actions>
+                            <p><strong>*Nota: </strong> Para cada pregunta nueva no olvide oprimir Agregar pregunta. Al terminar oprima Finalizar para generar el examen </p><br>
+
+                        </div>
+                    </form>
+
+
                 </div>
                
                 </div>

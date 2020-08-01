@@ -12,9 +12,11 @@ export class Globales {
   public static profesor: Profesor = {};
   public static administrador:Administrador={}
 
- //public static urlBase:string="https://geradmin.herokuapp.com/api";
- public static urlBase: string = "http://192.168.100.85:9000/api";
+ public static urlBase:string="https://geradmin.herokuapp.com/api";
+ //public static urlBase: string = "http://192.168.100.85:9000/api";
 //public static urlBase: string = "http://localhost:9000/api";
+//public static urlBase2:string="http://localhost:8080/api"
+public static urlBase2:string="https://admingeer.herokuapp.com/api"
   //TONTOTTTTTTTTTTT
 
   public static esProfesor: boolean;

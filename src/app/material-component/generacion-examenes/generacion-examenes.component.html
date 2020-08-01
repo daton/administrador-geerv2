@@ -1,33 +1,41 @@
 <mat-card *ngIf="mostrarSeleccionarMateria">
 	<mat-card-content>
 		<mat-card-title class="mb-3">Selecciona primero una materia</mat-card-title>
-		<div fxLayout="row wrap">
+		<div >
    
 			<!-- formita para  seleccion de la materia -->
 			<form [formGroup]="formita">
-			<div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+			<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
 				<mat-form-field>
-					<mat-select placeholder="Selecciona una materia" [(ngModel)]="materia">
+					<mat-select placeholder="Selecciona una materia"  [formControl]="formita.controls['materia']" [(ngModel)]="materia" name="materia">
 						<mat-option *ngFor="let materia of materias" [value]="materia">
 							{{materia}}
 						</mat-option>
 					</mat-select>
 				</mat-form-field>
+				<mat-hint *ngIf="formita.controls['materia'].hasError('required') && formita.controls['materia'].touched" 	class="text-danger font-14">Debeseleccinar la opcion
+				</mat-hint>
 			</div>
 			<!--Bloque-->
-			<div class="p-10" fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+			<div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
 				<mat-form-field>
-					<mat-select placeholder="Selecciona un bloque" [(ngModel)]="bloque">
+					<mat-select placeholder="Selecciona un bloque" [formControl]="formita.controls['bloque']" [(ngModel)]="bloque" name="bloque">
 						<mat-option *ngFor="let bloquesin of bloqueExamen" [value]="bloquesin">
 							{{bloquesin.nombreLargo}}
 						</mat-option>
 					</mat-select>
 				</mat-form-field>
+				<mat-hint *ngIf="formita.controls['bloque'].hasError('required') && formita.controls['bloque'].touched" 	class="text-danger font-14">Debes seleccinar la opcion
+				</mat-hint>
 			</div>
 
 		
 		<!--Boton-->
-		<button mat-raised-button color="primary" (click)="cargarReactivos(materia, bloque)"  [disabled]="materia===null&&bloque===null">Cargar Reactivos</button>
+		<br>
+		<mat-card-actions>
+			<button mat-raised-button color="primary" (click)="cargarReactivos(materia, bloque)"  [disabled]="!formita.valid">Cargar Reactivos</button>
+		</mat-card-actions>
+
 	</form>
 	</div>
 	</mat-card-content>
